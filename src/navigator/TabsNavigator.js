@@ -41,10 +41,10 @@ export const TabsNavigator = () => {
                 }
             })}>
 
-            <Tab.Screen name="Home" component={Home} />
+            <Tab.Screen name="Home" component={Home}/>
             <Tab.Screen name="Search" component={Search} />
             <Tab.Screen name="Profile" component={Profile} options={{tabBarIcon: ({focused}) => 
-                <IconProfile focused={focused} image={'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}/> 
+                <IconProfile focused={focused} image={'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'} /> 
             }} />
         </Tab.Navigator>
     );

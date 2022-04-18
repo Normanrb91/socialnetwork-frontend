@@ -27,6 +27,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 31
+        borderRadius: 31,
     }
 })

@@ -18,6 +18,7 @@ export const types = {
 export const authReducer = (state = initialState , action) => {
 
     switch (action.type) {
+        
         case types.addError:
             return {
                 ...state,
