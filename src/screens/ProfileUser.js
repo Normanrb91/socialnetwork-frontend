@@ -10,23 +10,20 @@ import { CustomButtonFollow } from '../components/CustomButtonFollow';
 import { Publication } from '../components/Publication';
 import { NoPublication } from '../components/NoPublication';
 
-export const Profile = ({route, navigation}) => {
-
-  console.log(route.params);
+export const ProfileUser = ({route, navigation}) => {
 
   const dispatch = useDispatch()
   const list = useRef(null);
-  const id = useRef(route.params.id);
   const [refresh, setRefresh] = useState(false)
 
   const {user, followers, followings, follow, followMe, publications, nextPage, loading} = useSelector( state => state.profile);
   const {usuario} = useSelector( state => state.auth);
 
   useEffect(() => {
-    dispatch(loadInfoUser(id.current))
-    dispatch(loadPublicationsUSer(1, id.current))
-    dispatch(loadNumberFollowers(id.current))
-  }, [dispatch, id])
+    dispatch(loadInfoUser(route.params.id))
+    dispatch(loadPublicationsUSer(1, route.params.id))
+    dispatch(loadNumberFollowers(route.params.id))
+  }, [dispatch])
 
   useEffect(() => {
     navigation.addListener('tabPress', e => {

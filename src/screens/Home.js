@@ -1,16 +1,16 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Text, FlatList, ActivityIndicator, RefreshControl} from 'react-native';
-
+import { FlatList, ActivityIndicator, RefreshControl, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-
-import { startPublication, startCleanPublication } from '../store/actions/publication'
+import { loadPublications, refreshPublications } from '../store/actions/publications';
+import { Publication } from '../components/Publication';
+import { NoPublication } from '../components/NoPublication';
 
 
 export const Home = ({navigation}) => {
 
   const dispatch = useDispatch();
   const list = useRef(null);
-  const { publications, nextPage } = useSelector(state => state.publication);
+  const { publications, nextPage } = useSelector(state => state.publications);
   const [refresh, setRefresh] = useState(false)
 
   useEffect(() => {
@@ -20,48 +20,31 @@ export const Home = ({navigation}) => {
       })
   }, [navigation])
 
-
-  useEffect(() => {
-      dispatch(startPublication({ page: 1 }))
-  }, [dispatch])
-
-
   const handleOnEndReached = () => {
     if(nextPage){
-      dispatch(startPublication({ page: nextPage }))
+      dispatch(loadPublications(nextPage))
     }
   }
 
-  const refreshPublication = () => {
+  const handledRefreshPublication = () => {
     setRefresh(true)
-    dispatch(startCleanPublication())
-    dispatch(startPublication({ page: 1 }))
+    dispatch(refreshPublications())
     setRefresh(false)
   }
-  
+
   return (
     <FlatList 
-        style={{ flex: 1 }}
-        ref={ list } 
-        data={ publications } 
-        showsVerticalScrollIndicator={ false }
-        keyExtractor={ (publication) => publication._id }
-        renderItem={ ({item}) => <Text style={{fontSize: 50}}>{ item.text }</Text> } 
-        onEndReached={ handleOnEndReached }
-        ListFooterComponent={
-            nextPage &&
-            <ActivityIndicator 
-                style={{ height: 50 }}
-                size={20}
-                color="#FBA741"
-            />
-        }
-        refreshControl={
-            <RefreshControl 
-                refreshing={ refresh }
-                onRefresh = { refreshPublication }
-            />
-        }
+      style={{ flex: 1 }}
+      ref={ list } 
+      data={ publications } 
+      showsVerticalScrollIndicator={ false }
+      keyExtractor={ (publication) => publication.id }
+      renderItem={ ({item}) => <Publication props={item} /> } 
+      onEndReached={ handleOnEndReached }
+      ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc', marginVertical: 10}} /> }
+      ListEmptyComponent = { <NoPublication texto={'Empieza a seguir a tus amigos para ver sus publicaciones'} /> } 
+      ListFooterComponent={nextPage && <ActivityIndicator style={{ height: 50 }} size={20} color="#FBA741" /> }
+      refreshControl={ <RefreshControl refreshing={ refresh } onRefresh = { handledRefreshPublication } /> }
     />
   )
 }

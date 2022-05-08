@@ -2,12 +2,14 @@ import { createStore, combineReducers, applyMiddleware} from "redux";
 import thunk from "redux-thunk";
 
 import { authReducer } from "./reducers/authReducer";
-import { publicationReducer } from "./reducers/publicationReducer";
+import { publicationsReducer } from "./reducers/publicationsReducer";
+import { profileReducer } from "./reducers/profileReducer";
 
 
 const reducers = combineReducers({
     auth: authReducer,
-    publication: publicationReducer
+    publications: publicationsReducer,
+    profile: profileReducer
 
 })
 

@@ -1,18 +1,39 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { loadPublications } from '../store/actions/publications';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Home } from '../screens/Home';
 import { Profile } from '../screens/Profile';
 import { Search } from '../screens/Search';
+import { Loading } from '../screens/Loading';
 import { IconProfile } from '../components/IconProfile';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { DashBoardNavigator } from './DashBoardNavigator';
+import { StackNavigator } from './StackNavigator';
+import { createStackNavigator } from '@react-navigation/stack';
+import { ProfileUser } from '../screens/ProfileUser';
 
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export const TabsNavigator = () => {
-    return (
+
+    const dispatch = useDispatch();
+    const { usuario } = useSelector(state => state.auth);
+    const { loading } = useSelector(state => state.publications);
+
+    useEffect(() => {
+        dispatch(loadPublications(1))
+    }, [dispatch])
+    
+    
+    return loading ? 
+        <Loading />
+    : (
         <Tab.Navigator
             sceneContainerStyle={{
                 backgroundColor: '#fff'
@@ -43,9 +64,10 @@ export const TabsNavigator = () => {
 
             <Tab.Screen name="Home" component={Home}/>
             <Tab.Screen name="Search" component={Search} />
-            <Tab.Screen name="Profile" component={Profile} options={{tabBarIcon: ({focused}) => 
-                <IconProfile focused={focused} image={'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'} /> 
+            <Tab.Screen name="ProfileUser" component={ProfileUser} initialParams={{id: usuario?._id}} options={{tabBarIcon: ({focused}) => 
+                <IconProfile focused={focused} image={usuario?.avatar} />  
             }} />
+    
         </Tab.Navigator>
     );
 }

@@ -1,19 +1,25 @@
 import React from 'react';
-import {Image, View, StyleSheet} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 
-export const IconProfile = ({focused, image, width = 35, height = 35}) => {
+export const IconProfile = ({focused = false, image, width = 35, height = 35, onpress = undefined}) => {
     return (
 
-        <View style={[
-            {...styles.container, width, height},
+        <View onTouchStart={onpress} style={[
+            {...styles.container, height, width},
             focused && {borderColor: '#FBA741', borderWidth: 2}
         ]}>
-            <Image
-                style={styles.image}
-                source={{
-                    uri: image,
-                }}
-            />
+
+            {
+                (image) ? 
+                <Image
+                    style={{...styles.image, resizeMode: 'center'}}
+                    source={{ uri: image }}  /> 
+                :
+                <Image
+                    style={{...styles.image, width, resizeMode: 'center'}}
+                    source={require('../../assets/noimage.png')}/>
+            }
+            
         </View>
     )
 }
@@ -21,12 +27,15 @@ export const IconProfile = ({focused, image, width = 35, height = 35}) => {
 
 const styles = StyleSheet.create({
     container:{
-        borderRadius: 35,
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 500,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     image: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 31,
+        borderRadius: 100,
+        margin: 2,
     }
 })

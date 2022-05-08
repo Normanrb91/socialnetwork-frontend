@@ -2,15 +2,16 @@
 const initialState = {
     publications : [],
     nextPage: 1,
+    loading: true
 }
 
 export const types = {
-    loadPublications: '[publication] loadPublications',
-    refreshPublication: '[publication] refreshPublication',
-    cleanPublications: '[publication] cleanPublications'
+    loadPublications: '[publications] loadPublications',
+    refreshPublications: '[publications] refreshPublication',
+    cleanPublications: '[publications] cleanPublications',
 }
 
-export const publicationReducer = (state = initialState , action) => {
+export const publicationsReducer = (state = initialState , action) => {
 
     switch (action.type) {
 
@@ -18,22 +19,26 @@ export const publicationReducer = (state = initialState , action) => {
             return {
                 ...state,
                 publications: [],
-                nextPage: 1
+                nextPage: 1,
+                loading: false
             }
 
         case types.loadPublications:
             return {
                 ...state,
                 publications: [...state.publications, ...action.payload.docs],
-                nextPage: action.payload.nextPage
+                nextPage: action.payload.nextPage,
+                loading: false
             }
 
-        case types.refreshPublication:
+        case types.refreshPublications:
             return {
                 ...state,
                 publications: [...action.payload.docs],
-                nextPage: 1
+                nextPage: action.payload.nextPage,
+                loading: false
             }
+
         default:
             return state;
     }
