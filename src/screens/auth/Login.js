@@ -3,12 +3,12 @@ import {Text, View, StyleSheet, Alert} from 'react-native';
 import {useForm} from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { CustomButton } from '../components/CustomButton';
-import { CustomInput } from '../components/CustomInput';
+import { CustomButton } from '../../components/CustomButton';
+import { CustomInput } from '../../components/CustomInput';
 
-import { removeError, startSingIn } from '../store/actions/auth';
+import { removeError, startSingIn } from '../../store/actions/auth';
 
-import { EMAIL_REGEX } from '../libs/constans/constants';
+import { EMAIL_REGEX } from '../../libs/constans/constants';
 
 
 export const Login = ({navigation}) => {

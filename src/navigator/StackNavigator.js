@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { checkToken } from '../store/actions/auth';
 
-import { Login } from '../screens/Login';
-import { Register } from '../screens/Register';
+import { Login } from '../screens/auth/Login';
+import { Register } from '../screens/auth/Register';
 import { TabsNavigator } from './TabsNavigator';
 import { Loading } from '../screens/Loading';
-
+import { ProfileOtherUser } from '../screens/ProfileOther';
 
 
 const Stack = createStackNavigator();
@@ -21,13 +21,13 @@ export const StackNavigator = () => {
     useEffect(() => {
       dispatch(checkToken())
     }, [dispatch])
+    
 
     if(status === 'cheking') return <Loading />
     
     return (
         <Stack.Navigator 
           screenOptions={{
-            headerShown: false,
             headerStyle:{elevation: 0, shadowColor: 'transparent'},
             cardStyle: {backgroundColor: '#fff'}
           }}>
@@ -35,7 +35,11 @@ export const StackNavigator = () => {
           {
             (status === 'authenticated') 
               ? (
-                <Stack.Screen name="Tabs" component={TabsNavigator} /> )
+                <>
+                  <Stack.Screen options={{ headerShown: false }} name="Tabs" component={TabsNavigator} /> 
+                  <Stack.Screen name="ProfileOtherUser" component={ProfileOtherUser} /> 
+                </>
+                )
               :(
                 <>
                   <Stack.Screen name="Login" component={Login} />

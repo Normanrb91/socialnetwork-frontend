@@ -1,42 +1,25 @@
-import React, { useEffect } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { loadPublications } from '../store/actions/publications';
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSelector } from 'react-redux';
 
-import { Home } from '../screens/Home';
-import { Profile } from '../screens/Profile';
-import { Search } from '../screens/Search';
-import { Loading } from '../screens/Loading';
+import { Home } from '../screens/tabs/Home';
+import { ProfileUser } from '../screens/tabs/ProfileUser';
+import { Search } from '../screens/tabs/Search';
 import { IconProfile } from '../components/IconProfile';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { DashBoardNavigator } from './DashBoardNavigator';
-import { StackNavigator } from './StackNavigator';
-import { createStackNavigator } from '@react-navigation/stack';
-import { ProfileUser } from '../screens/ProfileUser';
 
 
 const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
 
 export const TabsNavigator = () => {
 
-    const dispatch = useDispatch();
     const { usuario } = useSelector(state => state.auth);
-    const { loading } = useSelector(state => state.publications);
 
-    useEffect(() => {
-        dispatch(loadPublications(1))
-    }, [dispatch])
-    
-    
-    return loading ? 
-        <Loading />
-    : (
+    return(
         <Tab.Navigator
             sceneContainerStyle={{
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
             }}
             screenOptions={ ({ route }) => ({
                 tabBarShowLabel: false,
@@ -62,9 +45,10 @@ export const TabsNavigator = () => {
                 }
             })}>
 
-            <Tab.Screen name="Home" component={Home}/>
-            <Tab.Screen name="Search" component={Search} />
-            <Tab.Screen name="ProfileUser" component={ProfileUser} initialParams={{id: usuario?._id}} options={{tabBarIcon: ({focused}) => 
+            <Tab.Screen options={{ title: 'Nombre App',  }} name="Home" component={Home} />
+            <Tab.Screen options={{ headerShown: false  }} name="Search" component={Search} />
+            <Tab.Screen name="ProfileUser" component={ProfileUser} 
+                        options={{title: usuario?.name, tabBarIcon: ({focused}) => 
                 <IconProfile focused={focused} image={usuario?.avatar} />  
             }} />
     

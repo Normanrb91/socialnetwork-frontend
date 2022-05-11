@@ -1,14 +1,14 @@
 import socialNetworkApi from "../../libs/api/socialNetwork";
-import { types } from "../reducers/profileReducer";
+import { typesProfile } from "../reducers/profileOtherReducer";
 
 
-export const loadPublicationsUSer = (page, idUsuario) =>{
+export const loadPublications = (page, idUsuario) =>{
     return async (dispatch) =>{
         
         try {
             const {data} = await socialNetworkApi.get(`/publications/all/${idUsuario}?page=${page}`)
             dispatch({
-                type: types.loadPublicationsUser,
+                type: typesProfile.loadPublications,
                 payload: data.publicaciones
             });
             
@@ -20,53 +20,36 @@ export const loadPublicationsUSer = (page, idUsuario) =>{
 }
 
 
-export const refreshPublicationsUSer = (idUsuario) =>{
+export const refreshPublications = (idUsuario) =>{
     return async (dispatch) =>{
         
         try {
             const {data} = await socialNetworkApi.get(`/publications/all/${idUsuario}?page=1`)
             dispatch({
-                type: types.refreshPublicationsUser,
+                type: typesProfile.refreshPublications,
                 payload: data.publicaciones
-            });
-            
-        } catch (error) {
-            console.log('error qui');
-        }
-
-    }
-}
-
-export const loadInfoUser = (idUsuario) =>{
-    return async (dispatch) =>{
-        
-        try {
-            const {data} = await socialNetworkApi.get(`/user/${idUsuario}`)
-            
-            dispatch({
-                type: types.loadInfoUser,
-                payload: data
             });
             
         } catch (error) {
             console.log(error);
         }
-
     }
 }
 
-export const loadNumberFollowers = (idUsuario) =>{
+
+export const loadInfo = (idUsuario) =>{
     return async (dispatch) =>{
-        
         try {
+            const {data: publications} = await socialNetworkApi.get(`/publications/all/${idUsuario}?page=1`)
+            const {data: usuario} = await socialNetworkApi.get(`/user/${idUsuario}`)
             const followers = await socialNetworkApi.get(`/follow/followers/${idUsuario}`)
             const followings = await socialNetworkApi.get(`/follow/followings/${idUsuario}`)
-            
-
 
             dispatch({
-                type: types.loadNumberFollowers,
+                type: typesProfile.loadInfo,
                 payload: {
+                    usuario,
+                    publications,
                     seguidores: followers.data.seguidores.totalDocs,
                     siguiendo: followings.data.siguiendo.totalDocs
                 }
@@ -75,27 +58,19 @@ export const loadNumberFollowers = (idUsuario) =>{
         } catch (error) {
             console.log(error);
         }
-
     }
 }
 
 
-export const darLike = (idPublication) =>{
-    return async () =>{
+export const followUser = (idUser) =>{
+    return async (dispatch) =>{
         try {
-            await socialNetworkApi.post(`/like/${idPublication}`)
-
-        } catch (error) {
-            console.log(error);
-        }
-    }
-}
-
-
-export const quitarLike = (idPublication) =>{
-    return async () =>{
-        try {
-            await socialNetworkApi.delete(`/like/${idPublication}`)
+            const { data } = await socialNetworkApi.get(`/follow/${idUser}`)
+            
+            dispatch({
+                type: typesProfile.follow,
+                payload: data.ok
+            })
             
         } catch (error) {
             console.log(error);
@@ -104,4 +79,21 @@ export const quitarLike = (idPublication) =>{
 }
 
 
-export const cleanProfile = () =>({type: types.cleanProfile})
+export const unFollowUSer = (idUsuario) =>{
+    return async (dispatch) =>{
+        try {
+            const { data } = await socialNetworkApi.delete(`/follow/${idUsuario}`)
+
+            dispatch({
+                type: typesProfile.unFollow,
+                payload: data.ok
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+
+export const cleanProfileOther = () =>({type: typesProfile.cleanProfileOther})

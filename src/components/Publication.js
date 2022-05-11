@@ -1,48 +1,48 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
-import { useDispatch } from 'react-redux';
-import { darLike, quitarLike } from '../store/actions/publications';
-import { CarruselImage } from './CarruselImage';
 
-import {IconProfile} from './IconProfile'
-import { cleanProfile } from '../store/actions/profile';
+import { useNavigation } from '@react-navigation/core';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { darLike, quitarLike } from '../store/actions/auth';
+
+import { CarruselImage } from './CarruselImage';
+import { IconProfile } from './IconProfile'
+import { timeAgo } from '../libs/helpers/time';
+
 
 export const Publication = ({props}) => {
 
     const navigation = useNavigation()
     const dispatch = useDispatch();
-    const [like, setLike] = useState(props.youLike)
-    const [contador, setContador] = useState(props.likes)
+    const {usuario} = useSelector( state => state.auth);
+
 
     const darQuitarLike = () => {
-        if(like){
+        if(props.youLike)
             dispatch(quitarLike(props.id))
-            setLike(!like)
-            setContador(() => contador - 1 )
-        }else{
+        else
             dispatch(darLike(props.id))
-            setLike(!like)
-            setContador(() => contador + 1 )
-        }
     }
 
     const irPerfil = () => {
-        // navigation.navigate('Profile', {id: props.owner._id})
+        if(props.owner._id === usuario._id)
+            navigation.navigate('ProfileUser')
+        else 
+            navigation.navigate('ProfileOtherUser', {id: props.owner._id, name: props.owner.name })
     }
 
     return (
-
         <View style={styles.container}>
 
             <View style={styles.header}>
                 <View style={styles.containerAvatar}>
-                    <IconProfile onpress={irPerfil} image={props.owner.avatar} width={45} height={45}/>
+                    <IconProfile onpress={irPerfil} image={props?.owner.avatar} width={45} height={45}/>
                 </View>
 
                 <View>
-                    <Text style={styles.textName}>{props.owner.name}</Text>
-                    <Text style={styles.time}>{props.timestamp}</Text>             
+                    <Text onPress={irPerfil} style={styles.textName}>{props?.owner?.name}</Text>
+                    <Text style={styles.time}>{ timeAgo(props.timestamp) }</Text>             
                 </View>
             </View>
 
@@ -55,10 +55,11 @@ export const Publication = ({props}) => {
             </View>
   
             <View style={styles.footer}>
+
                 <TouchableOpacity activeOpacity={0.8} style={styles.containerIcon} onPress={darQuitarLike}>
                     <Image
                         style={styles.imageIcon}
-                        source={like ?  require('../../assets/like_active.png') 
+                        source={props.youLike ?  require('../../assets/like_active.png') 
                             : require('../../assets/like_inactive.png')} />  
                 </TouchableOpacity>
 
@@ -69,9 +70,9 @@ export const Publication = ({props}) => {
                 </TouchableOpacity>
 
                 <View style={styles.containerCount}>
-                    <Text style={styles.textRatio}>{contador > 0 ? contador + ' Me gusta' :  ''}</Text>
+                    <Text style={styles.textRatio}>{props.likes > 0 ? props.likes + ' Me gusta' :  ''}</Text>
                     <Text style={styles.textRatio}>{props.coments === 1 ? props.coments + ' comentario' :
-                           props.coments > 1 ?  props.coments + ' Comentarios'  :  '3700 Comentarios'}</Text>
+                           props.coments > 1 ?  props.coments + ' Comentarios'  :  '37 Comentarios'}</Text>
                 </View>
             </View>
         
@@ -84,7 +85,8 @@ export const Publication = ({props}) => {
 const styles = StyleSheet.create({
     container:{
        flex: 1,
-       padding: 15,
+       paddingHorizontal: 20,
+       paddingVertical: 15
     },
     header:{
         flexDirection: 'row',
@@ -108,11 +110,10 @@ const styles = StyleSheet.create({
     },
     textPubli:{
         color: 'black',
-        fontSize: 22,
+        fontSize: 18,
         letterSpacing: 0.5,
         alignSelf: 'flex-start',
         paddingBottom: 10
-       
     },
     footer:{
         height: 30,
@@ -132,7 +133,6 @@ const styles = StyleSheet.create({
     },
     textRatio:{
         fontSize: 16,
-   
         fontWeight: '600'
     }
 
