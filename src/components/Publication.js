@@ -4,19 +4,20 @@ import {Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { darLike, quitarLike } from '../store/actions/auth';
+import { darLike, quitarLike } from '../store/actions/home';
 
 import { CarruselImage } from './CarruselImage';
 import { IconProfile } from './IconProfile'
 import { timeAgo } from '../libs/helpers/time';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 
 export const Publication = ({props}) => {
 
-    const navigation = useNavigation()
+    const navigation = useNavigation();
     const dispatch = useDispatch();
     const {usuario} = useSelector( state => state.auth);
-
 
     const darQuitarLike = () => {
         if(props.youLike)
@@ -44,6 +45,7 @@ export const Publication = ({props}) => {
                     <Text onPress={irPerfil} style={styles.textName}>{props?.owner?.name}</Text>
                     <Text style={styles.time}>{ timeAgo(props.timestamp) }</Text>             
                 </View>
+
             </View>
 
             <View style={styles.body}>
@@ -57,10 +59,10 @@ export const Publication = ({props}) => {
             <View style={styles.footer}>
 
                 <TouchableOpacity activeOpacity={0.8} style={styles.containerIcon} onPress={darQuitarLike}>
-                    <Image
-                        style={styles.imageIcon}
-                        source={props.youLike ?  require('../../assets/like_active.png') 
-                            : require('../../assets/like_inactive.png')} />  
+                    <Icon  
+                        name={props.youLike ? 'heart' : 'heart-o'} 
+                        color={props.youLike ? 'red': 'black'} 
+                        size={30} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.containerIcon}>
@@ -121,8 +123,6 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     containerIcon: {
-        with: 30,
-        height: 30,
         paddingRight: 20
     },
     containerCount:{

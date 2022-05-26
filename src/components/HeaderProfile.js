@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { CustomButtonFollow } from './CustomButtonFollow';
 import { IconProfile } from './IconProfile';
 
@@ -7,38 +8,56 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { timeInit } from '../libs/helpers/time';
 
 
-export const HeaderProfile = ({usuario, followers, followings, followMe = false, text = 'Editar Perfil', color = '#000', backColor = '#fff', onPress}) => {
+export const HeaderProfile = ({
+  usuario, 
+  followers, 
+  followings, 
+  followMe = false, 
+  text = 'Editar Perfil', 
+  color = '#000', backColor = '#fff', 
+  onPress}) => {
+
+  const navigation = useNavigation();
+
+  const goListUserFollowers = () => {
+    navigation.navigate('ListUsersFollowers', {id: usuario._id})
+  }
+
+  const goListUserFollowwings = () => {
+    navigation.navigate('ListUsersFollowings', {id: usuario._id})
+  }
+
   return (
     <View style={{flex: 1}}>
 
         <View style={styles.profile}>
-          <IconProfile image={usuario.avatar} width={100} height={100} />
+          <IconProfile image={usuario?.avatar} width={100} height={100} />
 
-          <TouchableOpacity style={styles.estadisticas}>
-              <Text style={styles.text}>{followers}</Text>
+          <TouchableOpacity style={styles.estadisticas} onPress={goListUserFollowers}>
+              <Text style={styles.text}>{followers?.num}</Text>
               <Text style={styles.text}>Seguidores</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.estadisticas}>
-              <Text style={styles.text}>{followings}</Text>
+          <TouchableOpacity style={styles.estadisticas} onPress={goListUserFollowwings}>
+              <Text style={styles.text}>{followings?.num}</Text>
               <Text style={styles.text}>Siguiendo</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.description}>
 
-          <Text style={{...styles.text, fontSize: 25}}>{usuario.name}
+          <Text style={{...styles.text, fontSize: 25}}>{usuario?.name}
             <Text style={styles.textOff}>{ followMe && ' - Te sigue' }</Text>
           </Text>
 
           {
-          usuario.biography&&
-          <Text style={{...styles.text, ...styles.textDescription }}>{usuario.biography}</Text>
+          usuario?.biography&&
+          <Text style={{...styles.text, ...styles.textDescription }}>{usuario?.biography}</Text>
           }
           
           <View style={styles.date}>
             <Icon name='calendar-month' size={25} />
-            <Text style={{...styles.textOff, marginLeft: 5 }}>{ timeInit(usuario.createdAt) }</Text>
+            <Text style={{...styles.textOff, marginLeft: 5 }}>{ timeInit(usuario?.createdAt) }</Text>
           </View>
           
           <View style={{ marginVertical: 10, marginTop: 20}}>

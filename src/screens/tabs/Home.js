@@ -2,7 +2,7 @@ import React, {useEffect, useMemo, useRef, useState} from 'react';
 import { FlatList, ActivityIndicator, RefreshControl, View } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { loadPublicationsHome, refreshPublicationsHome } from '../../store/actions/auth';
+import { loadPublicationsHome, refreshPublicationsHome } from '../../store/actions/home';
 
 import { Publication } from '../../components/Publication';
 import { NoPublication } from '../../components/NoPublication';
@@ -12,7 +12,7 @@ export const Home = ({navigation}) => {
 
   const dispatch = useDispatch();
   const list = useRef(null);
-  const { publicationsHome, nextPageHome, loadingHome } = useSelector(state => state.auth);
+  const { publicationsHome, nextPageHome, loadingHome } = useSelector(state => state.home);
   const [refresh, setRefresh] = useState(false);
   const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsHome])
   

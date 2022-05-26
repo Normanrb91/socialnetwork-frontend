@@ -1,127 +1,94 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
-import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
+import { View, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { cleanProfileOther, followUser, loadInfoOther, loadPublications, refreshPublicationsOther, unFollowUSer } from '../store/actions/profileOther';
 
 import { Publication } from '../components/Publication';
 import { NoPublication } from '../components/NoPublication';
 import { HeaderProfile } from '../components/HeaderProfile';
-import { cleanProfileOther, followUser, loadInfo, loadPublications, refreshPublications, unFollowUSer } from '../store/actions/profileOther';
 
 
 export const ProfileOtherUser = ({ route, navigation }) => {
   
   const dispatch = useDispatch()
   const [refresh, setRefresh] = useState(false)
-  const {usuario, followers, followings, publications, followMe, follow, nextPage, loading} = useSelector( state => state.profileOther);
-  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publications])
+  const {usuarioOther, 
+    followMe, 
+    follow, 
+    followersOther, 
+    followingsOther, 
+    publicationsProfileOther, 
+    nextPageProfileOther, 
+    loadingProfileOther} = useSelector( state => state.profileOther);
+  
+  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsProfileOther])
   const {id, name} = route.params
 
   useEffect(() => {
-    if( id !== usuario?._id){
+    if( id !== usuarioOther?._id){
       dispatch(cleanProfileOther())
     }
+    dispatch(loadInfoOther(id))
+  }, [dispatch, id])
 
-    dispatch(loadInfo(id))
-
-  }, [dispatch])
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: name
     })
-  }, [])
+  }, [name])
+  
 
   const handleOnEndReached = () => {
-    if(nextPage){
-      dispatch(loadPublications(nextPage, id))
+    if(nextPageProfileOther){
+      dispatch(loadPublications(nextPageProfileOther, id))
     }
   }
 
   const handledRefreshPublication = () => {
     setRefresh(true)
-    dispatch(refreshPublications(id))
+    dispatch(refreshPublicationsOther(id))
     setRefresh(false)
   }
 
   const seguirDejarSeguir = () => {
     if(follow)
-      dispatch(unFollowUSer(usuario._id))
+      dispatch(unFollowUSer(usuarioOther._id))
     else
-      dispatch(followUser(usuario._id))
+      dispatch(followUser(usuarioOther._id))
   }
 
 
-  if(loading) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
+  if(loadingProfileOther) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
 
   return (
     <FlatList 
       style={{ flex: 1 }}
-      data={ publications } 
+      data={ publicationsProfileOther } 
       showsVerticalScrollIndicator={ false }
       keyExtractor={ (publication) => publication.id }
       renderItem={ renderItem } 
-      extraData={ publications }
+      extraData={ publicationsProfileOther }
       onEndReached={ handleOnEndReached }
       ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc'}} /> }
       ListHeaderComponent = { 
         <HeaderProfile 
-          usuario={usuario} 
-          followers={followers} 
-          followings={followings}
+          usuario={usuarioOther} 
+          followers={followersOther} 
+          followings={followingsOther}
           followMe={followMe}
-          text={follow ? 'Dejar de seguir' : 'Seguir'}
-          color={follow ? '#fff' : '#000'}
-          backColor={follow ? '#000' : '#fff'}
+          text={follow ? 'Siguiendo' : 'Seguir'}
+          color={follow ? '#000' : '#fff'}
+          backColor={follow ? '#fff' : '#000'}
           onPress={seguirDejarSeguir}
           /> }
       ListEmptyComponent = { <NoPublication texto={'Ninguna publicación realizada'} /> } 
-      ListFooterComponent={ nextPage && <ActivityIndicator style={{ height: 50 }} size={20} color="#FBA741" /> }
+      ListFooterComponent={ nextPageProfileOther && <ActivityIndicator style={{ height: 50 }} size={20} color="#FBA741" /> }
       refreshControl={ <RefreshControl refreshing={ refresh } onRefresh = { handledRefreshPublication }/> }
     />
   )
 }
-
-
-const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-  },
-  profile: {
- 
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    flexDirection: 'row',
-  },
-  description:{
-    paddingHorizontal: 20,
-  },
-  publications: {
-    flex: 1,
-  },
-  estadisticas:{
-    height: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 35
-  },
-  text:{
-    fontSize: 18,
-    color: '#000',
-    fontWeight: '600',
-    letterSpacing: 0.25,
-  },
-  textOff:{
-    fontSize: 16,
-    color: '#3c3c3c',
-    fontWeight: 'normal',
-    letterSpacing: 0.25,
-  },
-  separador: {
-    height: 1,  
-    backgroundColor: '#ccc'
-  }
-})
 
 
 {/* <View style={{flex: 1, justifyContent: 'space-evenly', alignItems: 'center'}}>

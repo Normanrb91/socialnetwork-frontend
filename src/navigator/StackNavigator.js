@@ -9,6 +9,8 @@ import { Register } from '../screens/auth/Register';
 import { TabsNavigator } from './TabsNavigator';
 import { Loading } from '../screens/Loading';
 import { ProfileOtherUser } from '../screens/ProfileOther';
+import { ListUserFollowers } from '../screens/ListUsersFollowers';
+import { ListUsersFollowings } from '../screens/ListUsersFollowings';
 
 
 const Stack = createStackNavigator();
@@ -38,6 +40,8 @@ export const StackNavigator = () => {
                 <>
                   <Stack.Screen options={{ headerShown: false }} name="Tabs" component={TabsNavigator} /> 
                   <Stack.Screen name="ProfileOtherUser" component={ProfileOtherUser} /> 
+                  <Stack.Screen name="ListUsersFollowers" component={ListUserFollowers} /> 
+                  <Stack.Screen name="ListUsersFollowings" component={ListUsersFollowings} /> 
                 </>
                 )
               :(
