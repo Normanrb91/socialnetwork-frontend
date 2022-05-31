@@ -11,6 +11,8 @@ import { Loading } from '../screens/Loading';
 import { ProfileOtherUser } from '../screens/ProfileOther';
 import { ListUserFollowers } from '../screens/ListUsersFollowers';
 import { ListUsersFollowings } from '../screens/ListUsersFollowings';
+import { New } from '../screens/New';
+import { EditProfile } from '../screens/EditProfile';
 
 
 const Stack = createStackNavigator();
@@ -42,6 +44,8 @@ export const StackNavigator = () => {
                   <Stack.Screen name="ProfileOtherUser" component={ProfileOtherUser} /> 
                   <Stack.Screen name="ListUsersFollowers" component={ListUserFollowers} /> 
                   <Stack.Screen name="ListUsersFollowings" component={ListUsersFollowings} /> 
+                  <Stack.Screen name="New" component={New} /> 
+                  <Stack.Screen name="EditProfile" component={EditProfile} /> 
                 </>
                 )
               :(

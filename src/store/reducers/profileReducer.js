@@ -18,6 +18,8 @@ const initialState = {
 export const typesProfile = {
     loadPublicationsProfile: '[profile] loadPublicationsProfile',
     refreshPublicationsProfile: '[profile] refreshPublicationsProfile',
+    addPublicationProfile: '[profile] addPublicationProfile',
+    deletePuplicationProfile: '[profile] deletePuplicationProfile',
     loadFollowersProfile: '[profile] loadFollowersProfile',
     refreshFollowersProfile: '[profile] refreshFollowersProfile',
     loadFollowingsProfile: '[profile] loadFollowingsProfile',
@@ -47,6 +49,13 @@ export const profileReducer = (state = initialState , action) => {
                 ...state,
                 publicationsProfile: [...action.payload.docs],
                 nextPageProfile: action.payload.nextPage,               
+            }
+
+        case typesProfile.deletePuplicationProfile:
+            return {
+                ...state,
+                publicationsProfile: state.publicationsProfile.filter(
+                    e => e.id !== action.payload.id )
             }
 
         case typesProfile.loadFollowersProfile:
@@ -89,7 +98,6 @@ export const profileReducer = (state = initialState , action) => {
                 }
             }
 
-
         case typesProfile.follow:
             return {
                 ...state,
@@ -106,7 +114,6 @@ export const profileReducer = (state = initialState , action) => {
                 }
             }
 
-
         case typesProfile.unFollow:
             return {
                 ...state,
@@ -122,24 +129,6 @@ export const profileReducer = (state = initialState , action) => {
                         e => e.id === action.payload.id ? {...e, siguiendo : false} : e )
                 }
             }            
-
-        // case typesProfile.follow:
-        //     return {
-        //         ...state,
-        //         followersOther:{
-        //             ...state.followers,
-        //             num: state.followers.num + 1
-        //         } 
-        //     }
-
-        // case typesProfile.unFollow:
-        //     return {
-        //         ...state,
-        //         followers:{
-        //             ...state.followers,
-        //             num: state.followers.num - 1
-        //         } 
-        //     }
 
         case typesProfile.likeProfile:
             return {

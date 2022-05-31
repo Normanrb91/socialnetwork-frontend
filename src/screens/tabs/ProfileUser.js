@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { View, FlatList, ActivityIndicator, RefreshControl, TouchableOpacity, TouchableHighlight, Text, StyleSheet } from 'react-native';
-import Modal from 'react-native-modal'
+import Modal from 'react-native-modal';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { loadFollowersProfile, loadFollowingsProfile, loadPublicationsProfile, refreshPublicationsProfile } from '../../store/actions/profile';
@@ -12,6 +12,7 @@ import { HeaderProfile } from '../../components/HeaderProfile';
 import { OptionModal } from '../../components/OptionModal';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Oticons from 'react-native-vector-icons/Octicons';
 
 export const ProfileUser = ({navigation}) => {
   
@@ -25,21 +26,33 @@ export const ProfileUser = ({navigation}) => {
     followings, 
     nextPageProfile, 
     loadingProfile} = useSelector( state => state.profile);
-  
-  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsProfile])
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity 
-          activeOpacity={0.8} 
-          style={{marginRight: 20}}
-          onPress={() => setOpenModalProfile(true)}>
-          <Icon
-            name={'bars'}
-            color={'black'}
-            size={25} />
-        </TouchableOpacity>
+        <View style={{flexDirection: 'row'}}>
+
+          <TouchableOpacity 
+            activeOpacity={0.8} 
+            style={{marginRight: 40}}
+            onPress={()=> navigation.navigate('New')}>
+            <Icon
+              name={'plus-square-o'}
+              color={'black'}
+              size={28} />
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            activeOpacity={0.8} 
+            style={{marginRight: 30}}
+            onPress={() => setOpenModalProfile(true)}>
+            <Icon
+              name={'bars'}
+              color={'black'}
+              size={25} />
+          </TouchableOpacity>
+
+        </View>
       )
     })
   }, [])
@@ -52,6 +65,7 @@ export const ProfileUser = ({navigation}) => {
       dispatch(loadFollowingsProfile())
     }
   }, [dispatch])
+
 
   useEffect(() => {
     navigation.addListener('tabPress', e => {
@@ -75,7 +89,7 @@ export const ProfileUser = ({navigation}) => {
 
   const editarPerfil = () => {
     setOpenModalProfile(false)
-    console.log('editar');
+    navigation.navigate('EditProfile');
     
   }
 
@@ -99,7 +113,7 @@ export const ProfileUser = ({navigation}) => {
         data={ publicationsProfile } 
         showsVerticalScrollIndicator={ false }
         keyExtractor={ (publication) => publication.id }
-        renderItem={ renderItem } 
+        renderItem={ ({item}) => <Publication props={item} /> } 
         extraData={ publicationsProfile }
         onEndReached={ handleOnEndReached }
         ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc'}} /> }
@@ -113,12 +127,21 @@ export const ProfileUser = ({navigation}) => {
       backdropOpacity={0.4} 
       isVisible={openModalProfile} 
       onBackdropPress={() => setOpenModalProfile(false)} 
+      onSwipeComplete={() => setOpenModalProfile(false)}
+      swipeDirection ="down"
       style={styles.modalTop}>
 
       <View style={styles.containerModal}>
+        <View style={styles.dash}>
+          <Oticons
+              size={40}
+              color={'black'}
+              name={'dash'} /> 
+        </View>
+        <OptionModal icon={'plus-square'} onPress={()=> navigation.navigate('New')} text={'Nueva Publicación'} />
         <OptionModal icon={'gear'} onPress={editarPerfil} text={'Editar Perfil'} />
         <OptionModal icon={'sign-out'} onPress={onLogout} text={'Cerrar Sesión'} />
-        <OptionModal icon={'user-times'} onPress={onLogoutAll} text={'Cerrar Todas las Sesiones'} />
+        <OptionModal icon={'sign-out'} onPress={onLogoutAll} text={'Cerrar Todas las Sesiones'} />
       </View>
     
     </Modal>
@@ -136,6 +159,11 @@ const styles = StyleSheet.create({
   modalTop:{
     justifyContent: 'flex-end',
     margin: 0
-    }
+  },
+  dash:{
+    position: 'absolute',
+    alignSelf: 'center',
+    top: 0
+  }
 })
 

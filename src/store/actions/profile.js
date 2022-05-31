@@ -1,4 +1,5 @@
 import socialNetworkApi from "../../libs/api/socialNetwork";
+import { typesHome } from "../reducers/homeReducer";
 import { typesProfile } from "../reducers/profileReducer";
 
 
@@ -121,23 +122,24 @@ export const refreshFollowingsProfile = () => {
 }
 
 
-export const followUserProfile = () =>{
+export const deletePublication = (idPublication) => {
     return async (dispatch) =>{
         try {
-            dispatch(refreshFollowingsProfile())
-            dispatch(refreshFollowersProfile())
-        } catch (error) {
-            console.log(error);
-        }
-    }
-}
+            const { data } = await socialNetworkApi.delete(`/publications/delete/${idPublication}`)
 
+            console.log(data);
+            if(data.ok){
+                dispatch({
+                    type: typesProfile.deletePuplicationProfile,
+                    payload: {id: idPublication}
+                });
 
-export const unFollowUSerProfile = () =>{
-    return async (dispatch) =>{
-        try {
-            dispatch(refreshFollowingsProfile())
-            dispatch(refreshFollowersProfile())
+                dispatch({
+                    type: typesHome.deletePublicationHome,
+                    payload: {id: idPublication}
+                });
+            }
+            
         } catch (error) {
             console.log(error);
         }

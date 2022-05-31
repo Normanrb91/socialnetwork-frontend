@@ -115,10 +115,10 @@ export const profileOtherReducer = (state = initialState , action) => {
         case typesProfileOther.follow:
             return {
                 ...state,
-                follow: action.payload.id === state.usuarioOther._id ? action.payload.ok : state.follow,
+                follow: action.payload.id === state.usuarioOther?._id ? action.payload.ok : state.follow,
                 followersOther: {
                     ...state.followersOther,
-                    num: action.payload.id === state.usuarioOther._id ? state.followersOther.num + 1 : state.followersOther.num,
+                    num: action.payload.id === state.usuarioOther?._id ? state.followersOther.num + 1 : state.followersOther.num,
                     user: state.followersOther.user.map(
                         e => e.id === action.payload.id ? {...e, siguiendo : true} : e )
                 },
@@ -129,14 +129,13 @@ export const profileOtherReducer = (state = initialState , action) => {
                 }
             }
         
-
         case typesProfileOther.unFollow:
             return {
                 ...state,
-                follow: action.payload.id === state.usuarioOther._id ? !action.payload.ok : state.follow,
+                follow: action.payload.id === state.usuarioOther?._id ? !action.payload.ok : state.follow,
                 followersOther: {
                     ...state.followersOther,
-                    num: action.payload.id === state.usuarioOther._id ? state.followersOther.num - 1 : state.followersOther.num,
+                    num: action.payload.id === state.usuarioOther?._id ? state.followersOther.num - 1 : state.followersOther.num,
                     user: state.followersOther.user.map(
                         e => e.id === action.payload.id ? {...e, siguiendo : false} : e )
                 },
@@ -147,27 +146,6 @@ export const profileOtherReducer = (state = initialState , action) => {
                 }
             }
         
-        // case typesProfileOther.follow:
-
-        //     return {
-        //         ...state,
-        //         follow: action.payload,
-        //         followersOther:{
-        //             ...state.followersOther,
-        //             num: state.followersOther.num + 1
-        //         } 
-        //     }
-
-        // case typesProfileOther.unFollow:
-        //     return {
-        //         ...state,
-        //         follow: !action.payload,
-        //         followersOther:{
-        //             ...state.followersOther,
-        //             num: state.followersOther.num - 1
-        //         } 
-        //     }
-
         case typesProfileOther.likeOther:
             return {
                 ...state,

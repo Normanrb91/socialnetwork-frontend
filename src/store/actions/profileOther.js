@@ -1,7 +1,7 @@
 import socialNetworkApi from "../../libs/api/socialNetwork";
 import { typesProfileOther } from "../reducers/profileOtherReducer";
 import { typesProfile } from "../reducers/profileReducer";
-import {followUserProfile, unFollowUSerProfile} from './profile';
+
 
 
 export const loadPublicationsOther = (page, idUsuario) =>{
@@ -21,6 +21,7 @@ export const loadPublicationsOther = (page, idUsuario) =>{
     }
 }
 
+
 export const refreshPublicationsOther = (idUsuario) =>{
     return async (dispatch) =>{
         
@@ -36,6 +37,7 @@ export const refreshPublicationsOther = (idUsuario) =>{
         }
     }
 }
+
 
 export const loadFollowersProfileOther = (page, idUsuario) => {
     return async (dispatch) =>{
@@ -54,6 +56,7 @@ export const loadFollowersProfileOther = (page, idUsuario) => {
     }
 }
 
+
 export const refreshFollowersProfileOther = (idUsuario) => {
     return async (dispatch) =>{
 
@@ -69,6 +72,7 @@ export const refreshFollowersProfileOther = (idUsuario) => {
         }
     }
 }
+
 
 export const loadFollowingsProfileOther = (page, idUsuario) => {
     return async (dispatch) =>{
@@ -87,6 +91,7 @@ export const loadFollowingsProfileOther = (page, idUsuario) => {
     }
 }
 
+
 export const refreshFollowingsProfileOther = (idUsuario) => {
     return async (dispatch) =>{
 
@@ -102,6 +107,7 @@ export const refreshFollowingsProfileOther = (idUsuario) => {
         }
     }
 }
+
 
 export const loadInfoOther = (idUsuario) =>{
     return async (dispatch) =>{
@@ -126,7 +132,6 @@ export const loadInfoOther = (idUsuario) =>{
         }
     }
 }
-
 
 
 export const followUser = (idUser) =>{

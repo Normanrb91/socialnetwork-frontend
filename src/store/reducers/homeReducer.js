@@ -2,11 +2,16 @@ const initialState = {
     publicationsHome : [],
     nextPageHome: 1,
     loadingHome: true,
+    publicationActive: {
+        listLikes: [],
+        listComments: []
+    }
 }
 
 
 export const typesHome = {
     loadPublicationsHome: '[home] loadPublicationsHome',
+    deletePublicationHome: '[home] deletePublicationHome',
     refreshPublicationsHome: '[home] refreshPublicationsHome',
     likeHome: '[home] likeHome',
     unLikeHome: '[home] unLikeHome',
@@ -31,6 +36,13 @@ export const homeReducer = (state = initialState , action) => {
                 ...state,
                 publicationsHome: [...action.payload.docs],
                 nextPageHome: action.payload.nextPage,            
+            }
+
+        case typesHome.deletePublicationHome:
+            return {
+                ...state,
+                publicationsHome: state.publicationsHome.filter(
+                    e => e.id !== action.payload.id )
             }
 
         case typesHome.likeHome:

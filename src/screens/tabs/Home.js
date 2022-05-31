@@ -1,5 +1,5 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
-import { FlatList, ActivityIndicator, RefreshControl, View } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import { FlatList, ActivityIndicator, RefreshControl, View, TouchableOpacity} from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { loadPublicationsHome, refreshPublicationsHome } from '../../store/actions/home';
@@ -7,6 +7,7 @@ import { loadPublicationsHome, refreshPublicationsHome } from '../../store/actio
 import { Publication } from '../../components/Publication';
 import { NoPublication } from '../../components/NoPublication';
 
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const Home = ({navigation}) => {
 
@@ -14,13 +15,32 @@ export const Home = ({navigation}) => {
   const list = useRef(null);
   const { publicationsHome, nextPageHome, loadingHome } = useSelector(state => state.home);
   const [refresh, setRefresh] = useState(false);
-  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsHome])
+
   
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity 
+          activeOpacity={0.8} 
+          style={{marginRight: 30}}
+          onPress={()=> navigation.navigate('New')}>
+          <Icon
+            name={'plus-square-o'}
+            color={'black'}
+            size={28} />
+        </TouchableOpacity>
+      )
+    })
+  }, [])
+
+
   useEffect(() => {
     if(publicationsHome.length === 0){
       dispatch(loadPublicationsHome(1))
     }
+
   }, [dispatch])
+
 
   useEffect(() => {
       navigation.addListener('tabPress', e => {
@@ -28,6 +48,7 @@ export const Home = ({navigation}) => {
           list.current.scrollToOffset({ y: 0, animated: true })
       })
   }, [navigation])
+
 
   const handleOnEndReached = () => {
     if(nextPageHome){
@@ -50,7 +71,7 @@ export const Home = ({navigation}) => {
         data={ publicationsHome } 
         showsVerticalScrollIndicator={ false }
         keyExtractor={ (publication) => publication.id }
-        renderItem={ renderItem } 
+        renderItem={ ({item}) => <Publication props={item} /> } 
         extraData={ publicationsHome }
         onEndReached={ handleOnEndReached }
         ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc', marginVertical: 10}} /> }

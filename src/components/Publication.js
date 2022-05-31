@@ -1,16 +1,23 @@
-import React from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import {Text, View, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import Modal from 'react-native-modal';
 
 import { useNavigation } from '@react-navigation/core';
 import { useDispatch, useSelector } from 'react-redux';
+import socialNetworkApi from '../libs/api/socialNetwork';
 
 import { darLike, quitarLike } from '../store/actions/home';
+import { followUser, unFollowUSer } from '../store/actions/profileOther';
+import { deletePublication } from '../store/actions/profile';
 
-import { CarruselImage } from './CarruselImage';
-import { IconProfile } from './IconProfile'
 import { timeAgo } from '../libs/helpers/time';
+import { CarruselImage } from './CarruselImage';
+import { IconProfile } from './IconProfile';
+import { OptionModal } from './OptionModal';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Oticons from 'react-native-vector-icons/Octicons';
 
 
 export const Publication = ({props}) => {
@@ -18,6 +25,25 @@ export const Publication = ({props}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const {usuario} = useSelector( state => state.auth);
+    const [openModalPubli, setOpenModalPubli] = useState(false);
+    const [follow, setFollow] = useState(null);
+
+
+    useEffect(() => {
+        getInfoOwnerPublication()
+    }, [])
+    
+
+    const getInfoOwnerPublication =  async ()=> {
+        try {
+            const {data} = await socialNetworkApi.get(`/user/${props.owner._id}`)
+            setFollow(data.siguiendo);
+            console.log('peticion');
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
 
     const darQuitarLike = () => {
         if(props.youLike)
@@ -26,6 +52,18 @@ export const Publication = ({props}) => {
             dispatch(darLike(props.id))
     }
 
+    
+    const seguirDejarSeguir = () => {
+        if(follow){
+            dispatch(unFollowUSer(props.owner._id))
+            setFollow(false)
+        }else{
+            dispatch(followUser(props.owner._id))
+            setFollow(true)
+        }
+    }
+    
+
     const irPerfil = () => {
         if(props.owner._id === usuario._id)
             navigation.navigate('ProfileUser')
@@ -33,7 +71,55 @@ export const Publication = ({props}) => {
             navigation.navigate('ProfileOtherUser', {id: props.owner._id, name: props.owner.name })
     }
 
+
+    const eliminarPublicacion = ()=> {
+        dispatch(deletePublication(props.id))
+    }
+
+
+    const ModalComponent = () => (
+        <Modal 
+            backdropOpacity={0.4} 
+            isVisible={openModalPubli} 
+            onBackdropPress={() => setOpenModalPubli(false)} 
+            onSwipeComplete={() => setOpenModalPubli(false)}
+            swipeDirection="down"
+            style={styles.modalTop}>
+
+            <View style={styles.containerModal}>
+                <View style={styles.dash}>
+                    <Oticons
+                        size={40}
+                        color={'black'}
+                        name={'dash'} /> 
+                </View>
+            
+                <OptionModal 
+                    icon={'heart'} 
+                    onPress={ () => { setOpenModalPubli(false); darQuitarLike()} } 
+                    text={ props.youLike ? 'Quitar Me gusta' : 'Dar Me gusta' } />
+
+                {
+                    props.owner._id === usuario._id ?
+                    <OptionModal 
+                        icon={'trash'} 
+                        onPress={() => { setOpenModalPubli(false); eliminarPublicacion()} } 
+                        text={'Eliminar Publicación'} />
+                    :
+                    <OptionModal 
+                        icon={follow ? 'user-times' : 'user-plus'} 
+                        onPress={ () => {setOpenModalPubli(false); seguirDejarSeguir()} } 
+                        text={follow ? 'Dejar de Seguir a ' + props.owner.name : 'Seguir a ' + props.owner.name} />
+                }
+
+            </View>
+
+        </Modal> 
+    )
+
+
     return (
+        
         <View style={styles.container}>
 
             <View style={styles.header}>
@@ -41,10 +127,22 @@ export const Publication = ({props}) => {
                     <IconProfile onpress={irPerfil} image={props?.owner.avatar} width={45} height={45}/>
                 </View>
 
-                <View>
-                    <Text onPress={irPerfil} style={styles.textName}>{props?.owner?.name}</Text>
+                <View style={styles.containerName}>
+                    <Text onPress={irPerfil} style={styles.textName} numberOfLines={2} ellipsizeMode='tail'>{props?.owner?.name}</Text>
                     <Text style={styles.time}>{ timeAgo(props.timestamp) }</Text>             
                 </View>
+
+                <TouchableHighlight 
+                    underlayColor="#ddd" 
+                    style={styles.iconContainer}  
+                    onPress={() => setOpenModalPubli(true)}>
+                    <View style={styles.ionicon}>
+                        <Ionicons 
+                            size={25}
+                            name={'ellipsis-vertical'}
+                        />
+                    </View>
+                </TouchableHighlight>
 
             </View>
 
@@ -58,8 +156,8 @@ export const Publication = ({props}) => {
   
             <View style={styles.footer}>
 
-                <TouchableOpacity activeOpacity={0.8} style={styles.containerIcon} onPress={darQuitarLike}>
-                    <Icon  
+                <TouchableOpacity activeOpacity={0.6} style={styles.containerIcon} onPress={darQuitarLike}>
+                    <Icon 
                         name={props.youLike ? 'heart' : 'heart-o'} 
                         color={props.youLike ? 'red': 'black'} 
                         size={30} />
@@ -77,8 +175,10 @@ export const Publication = ({props}) => {
                            props.coments > 1 ?  props.coments + ' Comentarios'  :  '37 Comentarios'}</Text>
                 </View>
             </View>
-        
+
+            <ModalComponent />
         </View>
+    
     )
 
 }
@@ -93,12 +193,15 @@ const styles = StyleSheet.create({
     header:{
         flexDirection: 'row',
         marginBottom: 10,
-        marginTop: 5
+        marginTop: 5,
     },
     containerAvatar:{
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 20
+        marginRight: 10
+    },
+    containerName:{
+        marginRight: 90
     },
     textName:{
         fontSize: 20,
@@ -134,6 +237,33 @@ const styles = StyleSheet.create({
     textRatio:{
         fontSize: 16,
         fontWeight: '600'
+    },
+    iconContainer: {
+        position: 'absolute',
+        right: 0,
+        top: 5,
+        borderRadius: 50
+    },
+    ionicon:{
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    containerModal:{
+        backgroundColor: 'white',
+        borderTopLeftRadius: 30, 
+        borderTopRightRadius: 30, 
+        paddingVertical:30
+    },
+    modalTop:{
+        justifyContent: 'flex-end',
+        margin: 0
+    },
+    dash:{
+        position: 'absolute',
+        alignSelf: 'center',
+        top: 0
     }
 
 })

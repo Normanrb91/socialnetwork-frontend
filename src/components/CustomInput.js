@@ -4,7 +4,7 @@ import {Controller} from 'react-hook-form';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,  rules = {}, }) => {
+export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,  rules = {} }) => {
 
     const [focus, setFocus] = useState(false)
     const [showPass, setShowPass] = useState(secureTextEntry)
@@ -22,13 +22,14 @@ export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,
                     styles.inputContainer, 
                     {borderBottomColor: error ? 'red' : focus ? '#FBA741' : '#ccc'},
                 ]}>
-
-                    <Icon
-                        color="#000"
-                        name={icon} 
-                        size={20}
-                        style={styles.icon} 
-                    />
+                    {
+                        icon &&
+                        <Icon
+                            color="#000"
+                            name={icon} 
+                            size={20}
+                            style={styles.icon} />
+                    }
 
                     <TextInput 
                         autoCapitalize='none'
@@ -39,7 +40,7 @@ export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,
                         placeholder={placeholder}
                         placeholderTextColor='rgba(0,0,0,0.4)'
                         secureTextEntry={showPass}
-                        style={styles.input}
+                        style={ icon ? styles.input : {...styles.input, }}
                         value={value}             
                     />
 
@@ -47,13 +48,12 @@ export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,
                     <TouchableOpacity 
                         activeOpacity={0.5} 
                         onPress={() => setShowPass(!showPass)}>
-
                         <Icon
                             color="#000"
                             name={showPass ? "eye-outline" : "eye-off-outline"} 
                             size={20} 
-                            style={styles.iconPass} 
-                        />
+                            style={styles.iconPass} />
+    
                     </TouchableOpacity>
                 )}
             
