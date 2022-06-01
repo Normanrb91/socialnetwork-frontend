@@ -3,7 +3,7 @@ import { Text, TouchableHighlight, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-export const OptionModal = ({icon, onPress, text, color='black', size = 25}) => {
+export const OptionModal = ({icon, onPress, text, color='black', size = 23}) => {
   return (
     <TouchableHighlight underlayColor="#ddd" style={styles.optionsModal}  
         onPress={() => onPress()}>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         paddingVertical: 15
     },
     textModal:{
-        fontSize: 22, 
+        fontSize: 20, 
         marginLeft: 15,
         color: 'black',
         marginRight: 20

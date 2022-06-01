@@ -31,7 +31,7 @@ export const HeaderProfile = ({
     <View style={{flex: 1}}>
 
         <View style={styles.profile}>
-          <IconProfile image={usuario?.avatar} width={100} height={100} />
+          <IconProfile image={usuario?.avatar?.secure_url ||null} width={100} height={100} />
 
           <TouchableOpacity style={styles.estadisticas} onPress={goListUserFollowers}>
               <Text style={styles.text}>{followers?.num}</Text>
@@ -46,7 +46,7 @@ export const HeaderProfile = ({
 
         <View style={styles.description}>
 
-          <Text style={{...styles.text, fontSize: 25}}>{usuario?.name}
+          <Text style={{...styles.text, fontSize: 23}}>{usuario?.name}
             <Text style={styles.textOff}>{ followMe && ' - Te sigue' }</Text>
           </Text>
 
@@ -56,7 +56,7 @@ export const HeaderProfile = ({
           }
           
           <View style={styles.date}>
-            <Icon name='calendar-month' size={25} />
+            <Icon name='calendar-month' size={20} />
             <Text style={{...styles.textOff, marginLeft: 5 }}>{ timeInit(usuario?.createdAt) }</Text>
           </View>
           
@@ -70,7 +70,7 @@ export const HeaderProfile = ({
 
         </View>
         
-        <Text style={{...styles.text, paddingLeft: 20, marginVertical: 10, fontSize: 20}}>Publicaciones</Text>
+        <Text style={{...styles.text, paddingLeft: 20, marginVertical: 10, fontSize: 18}}>Publicaciones</Text>
         <View style={styles.separador} />
     </View>
   )
@@ -81,6 +81,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   description:{
     paddingHorizontal: 20,
@@ -89,7 +90,6 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 35
   },
   text:{
     fontSize: 18,
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal', 
     marginTop: 10, 
     paddingRight: 5,
-    fontSize: 16
+    fontSize: 15
   },
   date:{
     flexDirection: 'row',
@@ -109,13 +109,14 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   textOff:{
-    fontSize: 16,
+    fontSize: 15,
     color: '#3c3c3c',
     fontWeight: 'normal',
     letterSpacing: 0.25,
   },
   separador: {
     height: 1,  
-    backgroundColor: '#ccc'
+    backgroundColor: '#ccc',
+    marginBottom: 10
   }
 })

@@ -87,3 +87,36 @@ export const startSingUp = (name, email, password) => {
 export const removeError = () => ({type: typesAuth.removeError})
 
 
+export const startUpdateProfile = (name, biography, avatar) => {
+    return async (dispatch) => {
+
+        const fileToUpload = {
+            uri: avatar.uri,
+            name: avatar.fileName,
+            type: avatar.type
+        }
+        const formData = new FormData();
+        formData.append('image', fileToUpload)
+
+        console.log(formData);
+
+        try {
+            //const {data} = await socialNetworkApi.post('/user/update', {name, biography})
+
+            const {data: img} = await socialNetworkApi.post('/user/avatar/perfil', formData)
+            console.log(img);
+            if(data.img){
+                dispatch({
+                    type: typesAuth.updateProfile,
+                    payload: img
+                });
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+
+    }
+}
+
+

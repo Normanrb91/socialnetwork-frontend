@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 
 export const IconProfile = ({focused = false, image, width = 35, height = 35, onpress = undefined}) => {
+    
     return (
 
         <View onTouchStart={onpress} style={[
@@ -10,13 +11,14 @@ export const IconProfile = ({focused = false, image, width = 35, height = 35, on
         ]}>
 
             {
+              
                 (image) ? 
                 <Image
-                    style={{...styles.image, resizeMode: 'center'}}
+                    style={{...styles.image, width, resizeMode: 'cover'}}
                     source={{ uri: image }}  /> 
                 :
                 <Image
-                    style={{...styles.image, width, resizeMode: 'center'}}
+                    style={{...styles.image, width, resizeMode: 'center', margin: 2}}
                     source={require('../../assets/noimage.png')}/>
             }
             
@@ -35,7 +37,6 @@ const styles = StyleSheet.create({
     },
     image: {
         flex: 1,
-        borderRadius: 100,
-        margin: 2,
+        borderRadius: 500,
     }
 })

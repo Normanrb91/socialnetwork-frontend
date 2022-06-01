@@ -38,7 +38,6 @@ export const Publication = ({props}) => {
         try {
             const {data} = await socialNetworkApi.get(`/user/${props.owner._id}`)
             setFollow(data.siguiendo);
-            console.log('peticion');
         } catch (error) {
             console.log(error);
         }
@@ -117,14 +116,13 @@ export const Publication = ({props}) => {
         </Modal> 
     )
 
-
     return (
         
         <View style={styles.container}>
 
             <View style={styles.header}>
                 <View style={styles.containerAvatar}>
-                    <IconProfile onpress={irPerfil} image={props?.owner.avatar} width={45} height={45}/>
+                    <IconProfile onpress={irPerfil} image={props.owner.avatar?.secure_url ||null} width={45} height={45}/>
                 </View>
 
                 <View style={styles.containerName}>
@@ -160,7 +158,7 @@ export const Publication = ({props}) => {
                     <Icon 
                         name={props.youLike ? 'heart' : 'heart-o'} 
                         color={props.youLike ? 'red': 'black'} 
-                        size={30} />
+                        size={28} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.containerIcon}>
@@ -204,7 +202,7 @@ const styles = StyleSheet.create({
         marginRight: 90
     },
     textName:{
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: 'bold',
         color: 'black',
     },
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
     },
     textPubli:{
         color: 'black',
-        fontSize: 18,
+        fontSize: 16,
         letterSpacing: 0.5,
         alignSelf: 'flex-start',
         paddingBottom: 10
@@ -235,14 +233,14 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
     textRatio:{
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '600'
     },
     iconContainer: {
         position: 'absolute',
-        right: 0,
+        right: -10,
         top: 5,
-        borderRadius: 50
+        borderRadius: 500
     },
     ionicon:{
         width: 40,

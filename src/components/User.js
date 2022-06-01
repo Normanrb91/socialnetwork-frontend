@@ -49,29 +49,29 @@ export const User = ({props}) => {
             <View style={styles.subContainer}>
 
                 <View style={styles.image}>
-                    <IconProfile onpress={irPerfil} image={props.avatar} width={60} height={60}/>
+                    <IconProfile onpress={irPerfil} image={props.avatar?.secure_url || null} width={60} height={60}/>
                 </View>
 
                 <View style={styles.containerText}>
                     <Text style={styles.textName} onpress={irPerfil} numberOfLines={2} ellipsizeMode='tail'>{props.name}</Text>
                     {
                     props.biography&&
-                    <View style={styles.description}>
-                        <Text  style={styles.textDescription} numberOfLines={2} ellipsizeMode='tail'>{props.biography}</Text>
+                    <View>
+                        <Text style={styles.textDescription} numberOfLines={2} ellipsizeMode='tail'>{props.biography}</Text>
                     </View>
                 }
                 </View>
-
-                <View style={styles.containerButton}>
-                    <CustomButtonFollow               
-                        text={ props.siguiendo ? 'Siguiendo' : 'Seguir' } 
-                        color={ props.siguiendo ? '#000' : '#fff' }
-                        backColor= { props.siguiendo ? '#fff' : '#000' }
-                        onPress ={ seguirDejarSeguir } />
-                </View>
-
+            
             </View>
-        
+
+            <View style={styles.containerButton}>
+                <CustomButtonFollow               
+                    text={ props.siguiendo ? 'Siguiendo' : 'Seguir' } 
+                    color={ props.siguiendo ? '#000' : '#fff' }
+                    backColor= { props.siguiendo ? '#fff' : '#000' }
+                    onPress ={ seguirDejarSeguir } />
+            </View>
+
         </View>
     )
 
@@ -80,20 +80,26 @@ export const User = ({props}) => {
 
 const styles = StyleSheet.create({
     container:{
-       flex: 1,
-       paddingHorizontal: 10,
-       paddingVertical: 10
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        paddingVertical:15,
+        marginTop: 5
     },
     containerFollower: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        position: 'absolute',
+        alignItems: 'center',
+        left: 5
     },
     follower:{
         paddingLeft: 40,
     },
     textFollower:{
-        fontSize: 14,
+        fontSize: 13,
         color: '#ccc',
-        marginLeft: 15
+        marginLeft: 10
     },
     subContainer:{
         flexDirection: 'row',
@@ -103,25 +109,19 @@ const styles = StyleSheet.create({
         marginRight: 10
     },
     containerText:{
-        maxWidth: '50%',
+        width: 200
     },
     containerButton:{
-        flex: 1,
-        alignItems: 'flex-end',
         justifyContent: 'center'
     },
-    description:{
-        flex: 1,
-    },
     textName:{
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '600',
         color: 'black',
-        alignSelf: 'flex-start'
     },
     textDescription:{
         color: 'black',
-        fontSize: 15,
+        fontSize: 14,
     },
 
 })

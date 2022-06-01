@@ -22,16 +22,16 @@ export const CustomButtonFollow = ({ backColor = "#ccc", color, onPress, text })
 
 const styles = StyleSheet.create({
     button: {
-        minWidth: 120,
+        minWidth: 100,
         borderRadius: 5,
         alignItems: 'center',
         borderWidth: 1,
         borderColor: '#ccc',
     },
     text: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: '600',
-        paddingVertical: 5
+        paddingVertical: 3
     }
 });
   

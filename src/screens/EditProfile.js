@@ -3,21 +3,30 @@ import {useForm} from 'react-hook-form';
 
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { IconProfile } from '../components/IconProfile';
 import { CustomInput } from '../components/CustomInput';
 import { OptionModal } from '../components/OptionModal';
 
 import Oticons from 'react-native-vector-icons/Octicons';
+import { startUpdateProfile } from '../store/actions/auth';
 
 
 export const EditProfile = ({navigation}) => {
 
     const { usuario } = useSelector(state => state.auth);
+    const dispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false)
-    const {control, handleSubmit, formState: {errors} } = useForm();
+    const [tempUri, setTempUri] = useState(null)
+    const {control, handleSubmit, formState: {errors} } = useForm({
+        defaultValues: {
+            name: usuario.name,
+            byography: usuario.biography
+        }
+    });
     
     useEffect(() => {
         navigation.setOptions({
@@ -33,24 +42,53 @@ export const EditProfile = ({navigation}) => {
                 </View>
             )
         })
-    }, []);
+    }, [tempUri]);
 
     const onUpdate = ({name, byography}) => {
-        console.log('dispacth actualizar perfil', name, byography);
+        dispatch(startUpdateProfile(name, byography, tempUri))
     }
 
     const deleteAvatar = () => {
-
+        
     }
 
-    const openGalery = () => {
+    const openCamera = async() => {
+        setOpenModal(false)
 
+        const result = await launchCamera({
+            mediaType: 'photo',
+            quality: 0.5
+        })
+        if(result.didCancel) return;
+
+        if(result.assets[0].uri){
+            setTempUri(result.assets[0])
+        }
+    }
+
+    const openGalery = async() => {
+        setOpenModal(false)
+
+        const result = await launchImageLibrary({
+            mediaType: 'photo',
+            quality: 0.5
+        })
+        if(result.didCancel) return;
+
+        if(result.assets[0].uri){
+            setTempUri(result.assets[0])
+        }
     }
 
     return (
         <View style={styles.container}>
             <View style={{ alignItems: 'center'}}>
-                <IconProfile width={120} height={120} image={usuario?.avatar}/>
+                {
+                    tempUri?.uri ? 
+                    <IconProfile width={120} height={120} image={ tempUri?.uri } />
+                    :
+                    <IconProfile width={120} height={120} image={ usuario?.avatar?.secure_url || null } />
+                }
                 <TouchableOpacity style={{marginTop: 15}} activeOpacity={0.8} onPress={() => setOpenModal(true)}>
                     <Text style={{...styles.textHeader, color: '#FBA741'}}>Cambiar foto de perfil</Text>
                 </TouchableOpacity>
@@ -59,6 +97,7 @@ export const EditProfile = ({navigation}) => {
                         name="name"
                         placeholder={"Nombre"}
                         control={control}
+                        setValue={usuario.name}
                         rules={{
                             required: 'Nombre obligatorio',
                             minLength: {
@@ -102,10 +141,11 @@ export const EditProfile = ({navigation}) => {
                             name={'dash'} /> 
                     </View>
                     
-                    <OptionModal icon={'camera-retro'} onPress={openGalery} text={'Nueva foto de perfil'} />
+                    <OptionModal icon={'camera-retro'} onPress={() => openCamera()} text={'Abrir cámara'} />
+                    <OptionModal icon={'image'} onPress={() => openGalery()} text={'Abrir galería'} />
                     {
-                        !usuario?.avatar &&
-                        <OptionModal icon={'eraser'} onPress={deleteAvatar}  text={'Eliminar foto de perfil'} />
+                        usuario?.avatar &&
+                        <OptionModal icon={'eraser'} onPress={() => deleteAvatar()}  text={'Eliminar foto de perfil'} />
                     }
                 </View>
         
