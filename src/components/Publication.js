@@ -30,7 +30,9 @@ export const Publication = ({props}) => {
 
 
     useEffect(() => {
-        getInfoOwnerPublication()
+        if(props.owner._id !== usuario._id){
+            getInfoOwnerPublication()
+        }
     }, [])
     
 

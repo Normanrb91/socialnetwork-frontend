@@ -1,26 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Modal from 'react-native-modal';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
 import { useDispatch, useSelector } from 'react-redux';
+import { startUpdateProfile } from '../store/actions/auth';
 
 import { IconProfile } from '../components/IconProfile';
 import { CustomInput } from '../components/CustomInput';
 import { OptionModal } from '../components/OptionModal';
 
 import Oticons from 'react-native-vector-icons/Octicons';
-import { startUpdateProfile } from '../store/actions/auth';
-
+const noImage = '../../assets/noimage.png';
 
 export const EditProfile = ({navigation}) => {
 
     const { usuario } = useSelector(state => state.auth);
+    const { loadingUpdate } = useSelector(state => state.profile);
     const dispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false)
-    const [tempUri, setTempUri] = useState(null)
+    const [tempUri, setTempUri] = useState(null);
+  
     const {control, handleSubmit, formState: {errors} } = useForm({
         defaultValues: {
             name: usuario.name,
@@ -46,10 +48,12 @@ export const EditProfile = ({navigation}) => {
 
     const onUpdate = ({name, byography}) => {
         dispatch(startUpdateProfile(name, byography, tempUri))
+        navigation.goBack();
     }
 
     const deleteAvatar = () => {
-        
+        setOpenModal(false)
+        setTempUri(noImage);
     }
 
     const openCamera = async() => {
@@ -80,14 +84,21 @@ export const EditProfile = ({navigation}) => {
         }
     }
 
+    if(loadingUpdate) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
+
     return (
         <View style={styles.container}>
+        
             <View style={{ alignItems: 'center'}}>
                 {
-                    tempUri?.uri ? 
-                    <IconProfile width={120} height={120} image={ tempUri?.uri } />
+                    
+                    tempUri ? 
+                    <IconProfile width={120} height={120} image={tempUri?.uri } />
                     :
-                    <IconProfile width={120} height={120} image={ usuario?.avatar?.secure_url || null } />
+                    usuario?.avatar ?
+                    <IconProfile width={120} height={120} image={ usuario?.avatar?.secure_url } />
+                    :
+                    <IconProfile width={120} height={120} image={ null } />
                 }
                 <TouchableOpacity style={{marginTop: 15}} activeOpacity={0.8} onPress={() => setOpenModal(true)}>
                     <Text style={{...styles.textHeader, color: '#FBA741'}}>Cambiar foto de perfil</Text>
@@ -144,7 +155,7 @@ export const EditProfile = ({navigation}) => {
                     <OptionModal icon={'camera-retro'} onPress={() => openCamera()} text={'Abrir cámara'} />
                     <OptionModal icon={'image'} onPress={() => openGalery()} text={'Abrir galería'} />
                     {
-                        usuario?.avatar &&
+                        tempUri !== noImage && usuario?.avatar  &&
                         <OptionModal icon={'eraser'} onPress={() => deleteAvatar()}  text={'Eliminar foto de perfil'} />
                     }
                 </View>

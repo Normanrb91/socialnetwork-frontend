@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import socialNetworkApi from "../../libs/api/socialNetwork";
+import socialNetworkApiFetch from '../../libs/api/socialNetworkFetch';
 import { typesAuth } from "../reducers/authReducer";
+import { typesHome } from '../reducers/homeReducer';
+import { typesProfile } from '../reducers/profileReducer';
 
 
 export const startSingIn = (email, password) => {
@@ -87,29 +90,47 @@ export const startSingUp = (name, email, password) => {
 export const removeError = () => ({type: typesAuth.removeError})
 
 
-export const startUpdateProfile = (name, biography, avatar) => {
-    return async (dispatch) => {
 
-        const fileToUpload = {
-            uri: avatar.uri,
-            name: avatar.fileName,
-            type: avatar.type
-        }
-        const formData = new FormData();
-        formData.append('image', fileToUpload)
-
-        console.log(formData);
+export const startUpdateProfile = (name, biography, image) => {
+    return async (dispatch, ) => {
+        const noImage = '../../assets/noimage.png';
 
         try {
-            //const {data} = await socialNetworkApi.post('/user/update', {name, biography})
 
-            const {data: img} = await socialNetworkApi.post('/user/avatar/perfil', formData)
-            console.log(img);
-            if(data.img){
+            dispatch({type: typesProfile.loading});
+
+            if(image !== null && image !== noImage){
+                const fileToUpload = {
+                    uri: image.uri,
+                    name: image.fileName,
+                    type: image.type
+                }
+                
+                const formData = new FormData();
+                formData.append('image', fileToUpload)
+                await socialNetworkApiFetch('user/avatar', 'POST', 'multipart/form-data', formData)
+    
+            }else if(image === noImage){
+                await socialNetworkApi.delete('/user/avatar')
+            }
+            
+            const {data} = await socialNetworkApi.post('/user/update', {name, biography})
+
+            if(data.ok){
                 dispatch({
                     type: typesAuth.updateProfile,
-                    payload: img
+                    payload: data
                 });
+
+                dispatch({
+                    type: typesHome.updateProfileHome,
+                    payload: data.usuario
+                })
+
+                dispatch({
+                    type: typesProfile.updateProfileMe,
+                    payload: data.usuario
+                })
             }
 
         } catch (error) {
@@ -118,5 +139,7 @@ export const startUpdateProfile = (name, biography, avatar) => {
 
     }
 }
+
+
 
 

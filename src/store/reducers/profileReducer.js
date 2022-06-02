@@ -29,6 +29,8 @@ export const typesProfile = {
     likeProfile: '[profile] likeProfile',
     unLikeProfile: '[profile] unLikeProfile',
     cleanProfile: '[profile] cleanProfile',
+    updateProfileMe: '[profile] updateProfileMe',
+    loading: '[profile] loading'
 }
 
 
@@ -147,6 +149,22 @@ export const profileReducer = (state = initialState , action) => {
         case typesProfile.cleanProfile:
             return{
                 ... initialState
+            }
+
+        case typesProfile.loading:
+            return{
+                ...state,
+                loadingProfile: true
+            }
+
+        case typesProfile.updateProfileMe:
+            return {
+                ...state,
+                publicationsProfile: state.publicationsProfile.map(
+                    e => (e.owner._id === action.payload._id) ? 
+                    {...e, owner: {...e.owner, avatar: action.payload?.avatar || null, name: action.payload.name}} 
+                    : e),
+                loadingProfile: false      
             }
 
         default:

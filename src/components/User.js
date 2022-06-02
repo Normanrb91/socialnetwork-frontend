@@ -18,10 +18,7 @@ export const User = ({props}) => {
     const {usuario} = useSelector(state => state.auth );
 
     const irPerfil = () => {
-        if(props.id === usuario._id)
-            navigation.navigate('ProfileUser')
-        else 
-            navigation.navigate('ProfileOtherUser', {id: props.id, name: props.name })
+           navigation.navigate('ProfileOtherUser', {id: props.id, name: props.name })
     }
 
     const seguirDejarSeguir = () => {

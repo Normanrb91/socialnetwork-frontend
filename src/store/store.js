@@ -10,7 +10,10 @@ const reducers = combineReducers({
     auth: authReducer,
     home: homeReducer,
     profile: profileReducer,
-    profileOther: profileOtherReducer
+    profileOther: profileOtherReducer,
+    //search: searchReducer, //listado de usuarios buscados
+    //publicationActive: publicationActiveReducer, //listado comentario y listado like
+
 })
 
 export const store = createStore(

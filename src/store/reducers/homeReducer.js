@@ -5,7 +5,7 @@ const initialState = {
     publicationActive: {
         listLikes: [],
         listComments: []
-    }
+    },
 }
 
 
@@ -16,6 +16,7 @@ export const typesHome = {
     likeHome: '[home] likeHome',
     unLikeHome: '[home] unLikeHome',
     cleanHome: '[home] cleanHome',
+    updateProfileHome: '[home] updateProfileHome'
 }
 
 
@@ -57,6 +58,15 @@ export const homeReducer = (state = initialState , action) => {
                 ...state,
                 publicationsHome: state.publicationsHome.map(
                     e => (e.id === action.payload) ? {...e, youLike: false, likes: e.likes -1 } : e)        
+            }
+
+        case typesHome.updateProfileHome:
+            return {
+                ...state,
+                publicationsHome: state.publicationsHome.map(
+                    e => (e.owner._id === action.payload._id) ? 
+                    {...e, owner: {...e.owner, avatar: action.payload?.avatar || null, name: action.payload.name}} 
+                    : e)
             }
 
         case typesHome.cleanHome:
