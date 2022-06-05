@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useForm} from 'react-hook-form';
 
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Modal from 'react-native-modal';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 
@@ -18,7 +18,6 @@ const noImage = '../../assets/noimage.png';
 export const EditProfile = ({navigation}) => {
 
     const { usuario } = useSelector(state => state.auth);
-    const { loadingUpdate } = useSelector(state => state.profile);
     const dispatch = useDispatch();
     const [openModal, setOpenModal] = useState(false)
     const [tempUri, setTempUri] = useState(null);
@@ -37,7 +36,7 @@ export const EditProfile = ({navigation}) => {
                 <View style={{flexDirection: 'row'}}>
                     <TouchableOpacity 
                         activeOpacity={0.8} 
-                        style={{marginRight: 30}}
+                        style={styles.guardar}
                         onPress={handleSubmit(onUpdate)} >
                         <Text style={styles.textHeader}>Guardar</Text>
                     </TouchableOpacity>
@@ -83,8 +82,6 @@ export const EditProfile = ({navigation}) => {
             setTempUri(result.assets[0])
         }
     }
-
-    if(loadingUpdate) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
 
     return (
         <View style={styles.container}>
@@ -171,7 +168,14 @@ const styles = StyleSheet.create({
     textHeader:{
         fontSize: 18,
         fontWeight: '600',
-        color: 'black'
+        color: 'white'
+    },
+    guardar:{
+      backgroundColor: '#FBA741',
+      borderRadius: 20,
+      paddingHorizontal: 12,
+      paddingVertical: 5,
+      marginRight: 30
     },
     container:{
         flex: 1,

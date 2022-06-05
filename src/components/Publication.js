@@ -147,7 +147,10 @@ export const Publication = ({props}) => {
             </View>
 
             <View style={styles.body}>
-                <Text style={styles.textPubli}>{props.text}</Text>
+                {
+                    props.text !== '' &&     
+                    <Text style={styles.textPubli}>{props.text}</Text>
+                }
                 {
                     props.images &&
                     <CarruselImage images={props.images}/>
@@ -188,7 +191,7 @@ const styles = StyleSheet.create({
     container:{
        flex: 1,
        paddingHorizontal: 20,
-       paddingVertical: 15
+       paddingVertical: 10
     },
     header:{
         flexDirection: 'row',

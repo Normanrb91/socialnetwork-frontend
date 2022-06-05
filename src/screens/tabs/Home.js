@@ -62,6 +62,7 @@ export const Home = ({navigation}) => {
     setRefresh(false)
   }
 
+
   if(loadingHome) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
   
   return (

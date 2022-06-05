@@ -30,6 +30,7 @@ export const typesProfile = {
     unLikeProfile: '[profile] unLikeProfile',
     cleanProfile: '[profile] cleanProfile',
     updateProfileMe: '[profile] updateProfileMe',
+    newPublicationProfile: '[profile] newPublicationProfile',
     loading: '[profile] loading'
 }
 
@@ -164,7 +165,16 @@ export const profileReducer = (state = initialState , action) => {
                     e => (e.owner._id === action.payload._id) ? 
                     {...e, owner: {...e.owner, avatar: action.payload?.avatar || null, name: action.payload.name}} 
                     : e),
-                loadingProfile: false      
+                loadingProfile: false    
+            }
+
+        case typesProfile.newPublicationProfile:
+            if(state.publicationsProfile.length > 0){
+                return {
+                    ...state,
+                    publicationsProfile: [action.payload.publicacion, ...state.publicationsProfile],
+                    loadingProfile: false
+                }
             }
 
         default:

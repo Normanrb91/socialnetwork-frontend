@@ -96,7 +96,6 @@ export const startUpdateProfile = (name, biography, image) => {
         const noImage = '../../assets/noimage.png';
 
         try {
-
             dispatch({type: typesProfile.loading});
 
             if(image !== null && image !== noImage){
