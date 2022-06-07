@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { View, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,6 +12,7 @@ import { HeaderProfile } from '../components/HeaderProfile';
 export const ProfileOtherUser = ({ route, navigation }) => {
   
   const dispatch = useDispatch()
+  const isMounted = useRef(true)
   const [refresh, setRefresh] = useState(false)
   const {usuarioOther, 
     followMe, 
@@ -22,16 +23,21 @@ export const ProfileOtherUser = ({ route, navigation }) => {
     nextPageProfileOther, 
     loadingProfileOther} = useSelector( state => state.profileOther);
   
-  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsProfileOther])
   const {id, name} = route.params
 
   useEffect(() => {
+
+    if(!isMounted.current) return
+
     if( id !== usuarioOther?._id){
       dispatch(cleanProfileOther())
     }
     dispatch(loadInfoOther(id))
-  }, [dispatch, id])
 
+    return () => {
+      isMounted.current = false
+    }
+  }, [dispatch, id])
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,6 +65,8 @@ export const ProfileOtherUser = ({ route, navigation }) => {
       dispatch(followUser(usuarioOther._id))
   }
 
+  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsProfileOther])
+
 
   if(loadingProfileOther) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
 
@@ -71,6 +79,7 @@ export const ProfileOtherUser = ({ route, navigation }) => {
       renderItem={ renderItem } 
       extraData={ publicationsProfileOther }
       onEndReached={ handleOnEndReached }
+      onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc'}} /> }
       ListHeaderComponent = { 
         <HeaderProfile 

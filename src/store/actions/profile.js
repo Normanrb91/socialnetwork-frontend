@@ -128,7 +128,7 @@ export const deletePublication = (idPublication) => {
         try {
             const { data } = await socialNetworkApi.delete(`/publications/delete/${idPublication}`)
 
-            console.log(data);
+            
             if(data.ok){
                 dispatch({
                     type: typesProfile.deletePuplicationProfile,
@@ -146,6 +146,7 @@ export const deletePublication = (idPublication) => {
         }
     }
 }
+
 
 export const newPublication = (text, images) => {
     return async (dispatch) =>{
@@ -167,7 +168,6 @@ export const newPublication = (text, images) => {
             
             const resp = await socialNetworkApiFetch('publications/new', 'POST', 'multipart/form-data', formData)
             const data = await resp.json()
-            console.log(data);
             
             if(data.ok){
                 dispatch({

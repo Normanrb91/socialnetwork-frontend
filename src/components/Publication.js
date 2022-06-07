@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity, TouchableHighlight } from 'react-native';
+import React, {memo, useEffect, useRef, useState } from 'react';
+import {Text, View, StyleSheet, TouchableOpacity, TouchableHighlight, Alert } from 'react-native';
 import Modal from 'react-native-modal';
 
 import { useNavigation } from '@react-navigation/core';
@@ -20,26 +20,35 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Oticons from 'react-native-vector-icons/Octicons';
 
 
-export const Publication = ({props}) => {
+export const Publication = memo(({props}) => {
 
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const isMounted = useRef(true)
     const {usuario} = useSelector( state => state.auth);
     const [openModalPubli, setOpenModalPubli] = useState(false);
     const [follow, setFollow] = useState(null);
 
 
     useEffect(() => {
+        if(!isMounted.current) return;
+
         if(props.owner._id !== usuario._id){
             getInfoOwnerPublication()
+        }
+
+        return () => {
+            isMounted.current = false
         }
     }, [])
     
 
     const getInfoOwnerPublication =  async ()=> {
         try {
-            const {data} = await socialNetworkApi.get(`/user/${props.owner._id}`)
-            setFollow(data.siguiendo);
+            if(isMounted){
+                const {data} = await socialNetworkApi.get(`/user/${props.owner._id}`)
+                setFollow(data.siguiendo);
+            }
         } catch (error) {
             console.log(error);
         }
@@ -74,7 +83,15 @@ export const Publication = ({props}) => {
 
 
     const eliminarPublicacion = ()=> {
-        dispatch(deletePublication(props.id))
+
+        Alert.alert(
+            'Eliminar publicación',
+            '¿Estas seguro que deseas eliminar esta publicacíon?',
+            [
+              { text: "Cancel", style: "cancel" },
+              { text: "OK", onPress: () =>  dispatch(deletePublication(props.id)) }
+            ]
+        );
     }
 
 
@@ -163,13 +180,15 @@ export const Publication = ({props}) => {
                     <Icon 
                         name={props.youLike ? 'heart' : 'heart-o'} 
                         color={props.youLike ? 'red': 'black'} 
-                        size={28} />
+                        size={28} 
+                        style={{marginTop: 1}}/>
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.containerIcon}>
-                    <Image
-                        style={styles.imageIcon}
-                        source={require('../../assets/comentario.png')} />
+                    <Ionicons
+                        name={'chatbubble-outline'} 
+                        color={'black'} 
+                        size={29} />
                 </TouchableOpacity>
 
                 <View style={styles.containerCount}>
@@ -184,7 +203,7 @@ export const Publication = ({props}) => {
     
     )
 
-}
+})
 
 
 const styles = StyleSheet.create({
@@ -229,7 +248,7 @@ const styles = StyleSheet.create({
         marginTop: 5
     },
     containerIcon: {
-        paddingRight: 20
+        marginRight: 20
     },
     containerCount:{
         flex: 1,

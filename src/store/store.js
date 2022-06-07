@@ -5,13 +5,14 @@ import { authReducer } from "./reducers/authReducer";
 import { homeReducer } from "./reducers/homeReducer";
 import { profileOtherReducer } from "./reducers/profileOtherReducer";
 import { profileReducer } from "./reducers/profileReducer";
+import { searchReducer } from "./reducers/searchReducer";
 
 const reducers = combineReducers({
     auth: authReducer,
     home: homeReducer,
     profile: profileReducer,
     profileOther: profileOtherReducer,
-    //search: searchReducer, //listado de usuarios buscados
+    search: searchReducer,
     //publicationActive: publicationActiveReducer, //listado comentario y listado like
 
 })

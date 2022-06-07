@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, TextInput, Image, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Image, ScrollView } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { newPublication } from '../store/actions/profile';
@@ -126,7 +126,6 @@ export const New = ({navigation}) => {
                     style={styles.photo} 
                     source={{ uri: e.uri }} /> 
                   </Fragment>
-                 
               ))
             }
            

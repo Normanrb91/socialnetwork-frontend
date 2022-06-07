@@ -45,8 +45,8 @@ export const TabsNavigator = () => {
                 }
             })}>
 
-            <Tab.Screen options={{ title: 'Nombre App',  }} name="Home" component={Home} />
-            <Tab.Screen options={{ headerShown: false  }} name="Search" component={Search} />
+            <Tab.Screen options={{ title: 'Status200',  }} name="Home" component={Home} />
+            <Tab.Screen options={{ title: 'Buscar usuarios'  }} name="Search" component={Search} />
             <Tab.Screen name="ProfileUser" component={ProfileUser} 
                         options={{title: usuario?.name, tabBarIcon: ({focused}) => 
                 <IconProfile focused={focused} image={usuario.avatar?.secure_url || null} />  
