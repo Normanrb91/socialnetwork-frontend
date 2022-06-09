@@ -26,9 +26,9 @@ export const Publication = memo(({props}) => {
     const dispatch = useDispatch();
     const isMounted = useRef(true)
     const {usuario} = useSelector( state => state.auth);
+    const { publication } = useSelector( state => state.publicationActive);
     const [openModalPubli, setOpenModalPubli] = useState(false);
     const [follow, setFollow] = useState(null);
-
 
     useEffect(() => {
         if(!isMounted.current) return;
@@ -41,7 +41,24 @@ export const Publication = memo(({props}) => {
             isMounted.current = false
         }
     }, [])
+
+
+    const activePublication = () => {
+        if( props.id !== publication?.id){
+            console.log('diferente');
+            //dispatch(cleanProfileOther())
+        }
+          //dispatch(loadInfoOther(id)) 
+    }
+
+    const goListLikes = () => {
+        navigation.navigate('ListLikes', {id: props.id})
+    }
     
+    const goListComments = () => {
+        navigation.navigate('ListComments', {id: props.id})
+    }
+
 
     const getInfoOwnerPublication =  async ()=> {
         try {
@@ -192,9 +209,20 @@ export const Publication = memo(({props}) => {
                 </TouchableOpacity>
 
                 <View style={styles.containerCount}>
-                    <Text style={styles.textRatio}>{props.likes > 0 ? props.likes + ' Me gusta' :  ''}</Text>
-                    <Text style={styles.textRatio}>{props.coments === 1 ? props.coments + ' comentario' :
-                           props.coments > 1 ?  props.coments + ' Comentarios'  :  '37 Comentarios'}</Text>
+
+                    <TouchableOpacity onPress={goListLikes} activeOpacity={0.6}>
+                        <Text style={styles.textRatio}>
+                            {props.likes > 0 ? props.likes + ' Me gusta' :  ''}
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity onPress={goListComments} activeOpacity={0.6}>
+                        <Text style={styles.textRatio}>
+                            {props.coments === 1 ? props.coments + ' comentario' :
+                            props.coments > 1 ?  props.coments + ' Comentarios'  :  '37 Comentarios'}
+                        </Text>
+                    </TouchableOpacity>
+
                 </View>
             </View>
 

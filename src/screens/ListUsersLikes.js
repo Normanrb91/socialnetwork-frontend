@@ -5,19 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { User } from '../components/User';
 
 
-
-export const Comments = ({route}) => {
+export const ListUSersLikes = ({route}) => {
 
     const { id } = route.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const [refresh, setRefresh] = useState(false);
-    const { listComments, pageComments, publicationId } = useSelector(state => state.publicationActive) 
+    const { listLikes, pageLikes, publicationId } = useSelector(state => state.publicationActive) 
 
 
     useLayoutEffect(() => {
       navigation.setOptions({
-        title: 'Comentarios'
+        title: 'Me gusta'
       })
     }, [])
 
@@ -33,30 +31,22 @@ export const Comments = ({route}) => {
 
 
     const handleOnEndReached = () => {
-        if(pageComments){
+        if(pageLikes){
           //dispatch(loadPublicationsHome(nextPageHome))
         }
     }
-
-
-    const handledRefreshComments = () => {
-        setRefresh(true)
-        dispatch(refreshPublicationsHome())
-        setRefresh(false)
-    }
-
           
     return (
         <FlatList 
             style={{ flex: 1 }}
-            data={ listComments } 
+            data={ listLikes } 
             showsVerticalScrollIndicator={ false }
-            keyExtractor={ (listComments) => listComments.id }
-            //renderItem={ ({item}) => <User props={item} /> } 
-            extraData={ listComments }
+            keyExtractor={ (listLikes) => listLikes.id }
+            renderItem={ ({item}) => <User props={item} /> } 
+            extraData={ listLikes }
             onEndReached={ handleOnEndReached }
-            ListFooterComponent={ pageComments && <ActivityIndicator style={{ height: 50 }} size={20} color="#FBA741" /> }
-            refreshControl={ <RefreshControl refreshing={ refresh } onRefresh = { handledRefreshComments }/> }
+            ListFooterComponent={ pageLikes && <ActivityIndicator style={{ height: 50 }} size={20} color="#FBA741" /> }
         />
     )
 }
+

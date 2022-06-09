@@ -102,7 +102,11 @@ export const ProfileUser = ({navigation}) => {
     
   }
 
-  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsProfile]);
+
+  const renderItem = useMemo( () => 
+    ({item}) => <Publication props={item} />, 
+    [publicationsProfile]
+  );
 
   
   if(loadingProfile) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
@@ -113,10 +117,10 @@ export const ProfileUser = ({navigation}) => {
         style={{ flex: 1 }}
         ref={ list } 
         data={ publicationsProfile } 
+        extraData={publicationsProfile}
         showsVerticalScrollIndicator={ false }
         keyExtractor={ (publication) => publication.id }
-        renderItem={ renderItem } 
-        extraData={ publicationsProfile }
+        renderItem={ renderItem }
         onEndReached={ handleOnEndReached }
         onEndReachedThreshold={0.5}
         ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc'}} /> }

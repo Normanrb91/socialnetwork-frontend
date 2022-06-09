@@ -39,6 +39,7 @@ export const ProfileOtherUser = ({ route, navigation }) => {
     }
   }, [dispatch, id])
 
+  
   useLayoutEffect(() => {
     navigation.setOptions({
       title: name
@@ -65,8 +66,10 @@ export const ProfileOtherUser = ({ route, navigation }) => {
       dispatch(followUser(usuarioOther._id))
   }
 
-  const renderItem = useMemo(() => ({item}) => <Publication props={item} />, [publicationsProfileOther])
-
+  const renderItem = useMemo( () =>
+    ({item}) => <Publication props={item} />, 
+    [publicationsProfileOther]
+  );
 
   if(loadingProfileOther) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
 
@@ -74,10 +77,10 @@ export const ProfileOtherUser = ({ route, navigation }) => {
     <FlatList 
       style={{ flex: 1 }}
       data={ publicationsProfileOther } 
+      extraData={ publicationsProfileOther }
       showsVerticalScrollIndicator={ false }
       keyExtractor={ (publication) => publication.id }
       renderItem={ renderItem } 
-      extraData={ publicationsProfileOther }
       onEndReached={ handleOnEndReached }
       onEndReachedThreshold={0.5}
       ItemSeparatorComponent={ () =>  <View style={{height: 1,  backgroundColor: '#ccc'}} /> }

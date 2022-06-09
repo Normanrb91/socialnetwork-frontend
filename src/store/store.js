@@ -5,6 +5,7 @@ import { authReducer } from "./reducers/authReducer";
 import { homeReducer } from "./reducers/homeReducer";
 import { profileOtherReducer } from "./reducers/profileOtherReducer";
 import { profileReducer } from "./reducers/profileReducer";
+import { publicationActiveReducer } from "./reducers/publicationActiveReducer";
 import { searchReducer } from "./reducers/searchReducer";
 
 const reducers = combineReducers({
@@ -13,8 +14,7 @@ const reducers = combineReducers({
     profile: profileReducer,
     profileOther: profileOtherReducer,
     search: searchReducer,
-    //publicationActive: publicationActiveReducer, //listado comentario y listado like
-
+    publicationActive: publicationActiveReducer
 })
 
 export const store = createStore(
