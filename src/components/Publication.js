@@ -26,7 +26,6 @@ export const Publication = memo(({props}) => {
     const dispatch = useDispatch();
     const isMounted = useRef(true)
     const {usuario} = useSelector( state => state.auth);
-    const { publication } = useSelector( state => state.publicationActive);
     const [openModalPubli, setOpenModalPubli] = useState(false);
     const [follow, setFollow] = useState(null);
 
@@ -42,14 +41,6 @@ export const Publication = memo(({props}) => {
         }
     }, [])
 
-
-    const activePublication = () => {
-        if( props.id !== publication?.id){
-            console.log('diferente');
-            //dispatch(cleanProfileOther())
-        }
-          //dispatch(loadInfoOther(id)) 
-    }
 
     const goListLikes = () => {
         navigation.navigate('ListLikes', {id: props.id})

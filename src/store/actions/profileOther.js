@@ -1,6 +1,7 @@
 import socialNetworkApi from "../../libs/api/socialNetwork";
 import { typesProfileOther } from "../reducers/profileOtherReducer";
 import { typesProfile } from "../reducers/profileReducer";
+import { typesPublicationActive } from "../reducers/publicationActiveReducer";
 
 
 
@@ -147,6 +148,10 @@ export const followUser = (idUser) =>{
                     type: typesProfileOther.follow,
                     payload: {ok: data.ok, id: idUser}
                 })
+                dispatch({
+                    type: typesPublicationActive.follow,
+                    payload: {ok: data.ok, id: idUser}
+                })
             }
             
         } catch (error) {
@@ -167,6 +172,10 @@ export const unFollowUSer = (idUser) =>{
                 });
                 dispatch({
                     type: typesProfileOther.unFollow,
+                    payload: {ok: data.ok, id: idUser}
+                });
+                dispatch({
+                    type: typesPublicationActive.unFollow,
                     payload: {ok: data.ok, id: idUser}
                 });
             }

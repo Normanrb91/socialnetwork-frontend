@@ -4,8 +4,7 @@ const initialState = {
     listComments: [],
     pageLikes: undefined,
     pageComments: undefined,
-    loadingLike: true,
-    loadingComment: true
+    loading: true,
 }
 
 export const typesPublicationActive = {
@@ -15,6 +14,8 @@ export const typesPublicationActive = {
     cleanPublicationActive: '[publicationActive] cleanPublicationActive',
     newComment: '[publicationActive] newComment',
     deleteComment: '[publicationActive] deleteComment',
+    follow: '[publicationActive] follow',
+    unFollow: '[publicationActive] unFollow',
 }
 
 
@@ -26,25 +27,25 @@ export const publicationActiveReducer = (state = initialState , action) => {
             return{
                 ...state,
                 publicationId: action.payload.publication,
-                listLikes: [...state.listLikes, ...action.payload.usuarios.docs],
-                pageLikes: action.payload.usuarios.nextPage,
-                loadingLike: false
+                listLikes: [...state.listLikes, ...action.payload.docs],
+                pageLikes: action.payload.nextPage,
+                loading: false
             }
 
         case typesPublicationActive.loadListComments:
             return{
                 ...state,
                 publicationId: action.payload.publication,
-                listComments: [...state.listComments, ...action.payload.comentarios.docs],
-                pageComments: action.payload.comentarios.nextPage,
-                loadingComment: false
+                listComments: [...state.listComments, ...action.payload.docs],
+                pageComments: action.payload.nextPage,
+                loading: false
             }
 
         case typesPublicationActive.refreshListComments:
             return{
                 ...state,
-                listComments: [...action.payload.comentarios.docs],
-                pageComments: action.payload.comentarios.nextPage,           
+                listComments: [...action.payload.docs],
+                pageComments: action.payload.nextPage,           
             }
 
         case typesPublicationActive.cleanPublicationActive:
@@ -56,7 +57,7 @@ export const publicationActiveReducer = (state = initialState , action) => {
             return {
                 ...state,
                 listComments: state.listComments.filter(
-                    e => e._id !== action.payload.id )
+                    e => e._id !== action.payload )
             }
 
         case typesPublicationActive.newComment:
@@ -64,6 +65,20 @@ export const publicationActiveReducer = (state = initialState , action) => {
                 ...state,
                 listComments: [action.payload.comentario, ...state.listComments],
             }
+
+        case typesPublicationActive.follow:
+            return {
+                ...state,
+                listLikes: state.listLikes.map(
+                    e => e.id === action.payload.id ? {...e, siguiendo : true} : e )
+            }
+
+        case typesPublicationActive.unFollow:
+            return {
+                ...state,
+                listLikes: state.listLikes.map(
+                    e => e.id === action.payload.id ? {...e, siguiendo : false} : e )  
+            }  
 
         default:
             return state;

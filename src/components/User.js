@@ -29,8 +29,7 @@ export const User = ({props}) => {
         }
     }
     
-
-    if( props.id === usuario._id) return <></>
+    //if( props.id === usuario._id) return <></>
 
     return (
         <View style={styles.container}>
@@ -61,13 +60,23 @@ export const User = ({props}) => {
             
             </View>
 
+
+            
             <View style={styles.containerButton}>
+            {
+                props.id !== usuario._id ?
                 <CustomButtonFollow               
                     text={ props.siguiendo ? 'Siguiendo' : 'Seguir' } 
                     color={ props.siguiendo ? '#000' : '#fff' }
                     backColor= { props.siguiendo ? '#fff' : '#000' }
                     onPress ={ seguirDejarSeguir } />
+                :
+                <View style={styles.buttonDisabled}>
+                    <Text style={styles.txtBtn}>{'Tú'}</Text>
+                </View>
+            }
             </View>
+            
 
         </View>
     )
@@ -120,5 +129,19 @@ const styles = StyleSheet.create({
         color: 'black',
         fontSize: 14,
     },
+
+    buttonDisabled:{
+        minWidth: 100,
+        borderRadius: 5,
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ccc',
+        backgroundColor: '#ccc'
+    },
+    txtBtn: {
+        fontSize: 16,
+        fontWeight: '600',
+        paddingVertical: 3,
+    }
 
 })

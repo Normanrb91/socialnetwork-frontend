@@ -1,7 +1,8 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { FlatList, ActivityIndicator, RefreshControl} from 'react-native';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { FlatList, ActivityIndicator} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
+import { cleanPublicationActive, loadListLikes } from '../store/actions/publication';
 import { User } from '../components/User';
 
 
@@ -10,7 +11,7 @@ export const ListUSersLikes = ({route}) => {
     const { id } = route.params;
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { listLikes, pageLikes, publicationId } = useSelector(state => state.publicationActive) 
+    const { listLikes, pageLikes, publicationId, loading } = useSelector(state => state.publicationActive) 
 
 
     useLayoutEffect(() => {
@@ -20,11 +21,10 @@ export const ListUSersLikes = ({route}) => {
     }, [])
 
     useEffect(() => {
-
         if( id !== publicationId){
-            //dispatch(cleanProfileOther())
+            dispatch(cleanPublicationActive())
         }
-       // dispatch(loadInfoOther(id))
+       dispatch(loadListLikes(id, 1))
 
     }, [dispatch, id])
     
@@ -32,10 +32,13 @@ export const ListUSersLikes = ({route}) => {
 
     const handleOnEndReached = () => {
         if(pageLikes){
-          //dispatch(loadPublicationsHome(nextPageHome))
+            dispatch(loadListLikes(publicationId, pageLikes))
         }
     }
           
+    console.log(loading);
+    if(loading) return (<ActivityIndicator style={{ flex: 1, justifyContent: 'center' }} size={50} color="#FBA741" />)
+
     return (
         <FlatList 
             style={{ flex: 1 }}
