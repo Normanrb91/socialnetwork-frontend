@@ -76,7 +76,7 @@ export const Comments = ({route}) => {
                 />
 
             <View style={styles.containerInput}>
-                <IconProfile width={45} height={45} image={usuario.avatar?.secure_url} />
+                <IconProfile width={45} height={45} image={usuario?.avatar?.secure_url} />
                 <TextInput
                     style={styles.input}
                     onChangeText={onChangeText}

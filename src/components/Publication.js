@@ -192,7 +192,7 @@ export const Publication = memo(({props}) => {
                         style={{marginTop: 1}}/>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.containerIcon}>
+                <TouchableOpacity style={styles.containerIcon} onPress={goListComments} >
                     <Ionicons
                         name={'chatbubble-outline'} 
                         color={'black'} 
@@ -210,7 +210,7 @@ export const Publication = memo(({props}) => {
                     <TouchableOpacity onPress={goListComments} activeOpacity={0.6}>
                         <Text style={styles.textRatio}>
                             {props.coments === 1 ? props.coments + ' comentario' :
-                            props.coments > 1 ?  props.coments + ' Comentarios'  :  '37 Comentarios'}
+                            props.coments > 1 ?  props.coments + ' Comentarios'  :  ''}
                         </Text>
                     </TouchableOpacity>
 

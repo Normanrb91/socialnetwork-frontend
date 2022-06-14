@@ -79,7 +79,7 @@ export const deleteComent = (idComent) => {
 
 
 export const newComment = (text, idPublication) => {
-    console.log(text, idPublication);
+    
     return async (dispatch) =>{
         try {
             
