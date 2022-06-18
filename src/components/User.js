@@ -35,11 +35,12 @@ export const User = ({props}) => {
         <View style={styles.container}>
 
             {
-                props.seguido &&
+                props.seguido ?
                 <View style={styles.containerFollower}>
                     <Icon style={styles.follower} name='user' size={15} color={'#ccc'} />
                     <Text style={styles.textFollower}>Te sigue</Text>
                 </View>
+                : null
             }
 
             <View style={styles.subContainer}>
@@ -51,10 +52,12 @@ export const User = ({props}) => {
                 <View style={styles.containerText}>
                     <Text style={styles.textName} onpress={irPerfil} numberOfLines={2} ellipsizeMode='tail'>{props.name}</Text>
                     {
-                    props.biography&&
+                    props.biography ?
                     <View>
                         <Text style={styles.textDescription} numberOfLines={2} ellipsizeMode='tail'>{props.biography}</Text>
                     </View>
+                    :
+                    null
                 }
                 </View>
             

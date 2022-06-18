@@ -3,7 +3,10 @@ import socialNetworkApi from "../../libs/api/socialNetwork";
 import socialNetworkApiFetch from '../../libs/api/socialNetworkFetch';
 import { typesAuth } from "../reducers/authReducer";
 import { typesHome } from '../reducers/homeReducer';
+import { typesProfileOther } from '../reducers/profileOtherReducer';
 import { typesProfile } from '../reducers/profileReducer';
+import { typesPublicationActive } from '../reducers/publicationActiveReducer';
+import { typeSearch } from '../reducers/searchReducer';
 
 
 export const startSingIn = (email, password) => {
@@ -57,6 +60,11 @@ export const startLogout = (logout) => {
             await socialNetworkApi.get(`/auth/${logout}`)
             await AsyncStorage.removeItem('token')
             dispatch({type: typesAuth.logout});
+            dispatch({type: typesHome.cleanHome});
+            dispatch({type: typesProfile.cleanProfile});
+            dispatch({type: typesProfileOther.cleanProfileOther});
+            dispatch({type: typesPublicationActive.cleanPublicationActive});
+            dispatch({type: typeSearch.cleanSearch});
             
         } catch (error) {
             console.log(error);

@@ -49,7 +49,7 @@ export const TabsNavigator = () => {
             <Tab.Screen options={{ title: 'Buscar usuarios'  }} name="Search" component={Search} />
             <Tab.Screen name="ProfileUser" component={ProfileUser} 
                         options={{title: usuario?.name, tabBarIcon: ({focused}) => 
-                <IconProfile focused={focused} image={usuario.avatar?.secure_url || null} />  
+                <IconProfile focused={focused} image={usuario?.avatar?.secure_url || null} />  
             }} />
     
         </Tab.Navigator>

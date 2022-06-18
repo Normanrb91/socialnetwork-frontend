@@ -32,7 +32,7 @@ export const Publication = memo(({props}) => {
     useEffect(() => {
         if(!isMounted.current) return;
 
-        if(props.owner._id !== usuario._id){
+        if(props.owner._id !== usuario?._id){
             getInfoOwnerPublication()
         }
 
@@ -83,7 +83,7 @@ export const Publication = memo(({props}) => {
     
 
     const irPerfil = () => {
-        if(props.owner._id === usuario._id)
+        if(props.owner._id === usuario?._id)
             navigation.navigate('ProfileUser')
         else 
             navigation.navigate('ProfileOtherUser', {id: props.owner._id, name: props.owner.name })
@@ -126,7 +126,7 @@ export const Publication = memo(({props}) => {
                     text={ props.youLike ? 'Quitar Me gusta' : 'Dar Me gusta' } />
 
                 {
-                    props.owner._id === usuario._id ?
+                    props.owner._id === usuario?._id ?
                     <OptionModal 
                         icon={'trash'} 
                         onPress={() => { setOpenModalPubli(false); eliminarPublicacion()} } 
