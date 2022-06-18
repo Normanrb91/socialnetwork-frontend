@@ -90,6 +90,7 @@ export const Comment = ({props}) => {
                             <Ionicons 
                                 size={25}
                                 name={'ellipsis-vertical'}
+                                color={'black'}
                                 />
                         </View>
                     </TouchableHighlight>

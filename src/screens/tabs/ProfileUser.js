@@ -93,6 +93,11 @@ export const ProfileUser = ({navigation}) => {
     
   }
 
+  const nuevaPuclicacion = () => {
+    setOpenModalProfile(false)
+    navigation.navigate('New')
+  }
+
   const onLogout = () => {
     dispatch(startLogout('logout'))
   }
@@ -145,7 +150,7 @@ export const ProfileUser = ({navigation}) => {
               color={'black'}
               name={'dash'} /> 
         </View>
-        <OptionModal icon={'plus-square'} onPress={()=> navigation.navigate('New')} text={'Nueva Publicación'} />
+        <OptionModal icon={'plus-square'} onPress={nuevaPuclicacion} text={'Nueva Publicación'} />
         <OptionModal icon={'gear'} onPress={editarPerfil} text={'Editar Perfil'} />
         <OptionModal icon={'sign-out'} onPress={onLogout} text={'Cerrar Sesión'} />
         <OptionModal icon={'sign-out'} onPress={onLogoutAll} text={'Cerrar Todas las Sesiones'} />

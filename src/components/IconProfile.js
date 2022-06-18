@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 
-export const IconProfile = ({focused = false, image, width = 35, height = 35, onpress = undefined}) => {
+export const IconProfile = ({focused = false, image, width = 36, height = 36, onpress = undefined}) => {
     
     return (
 
@@ -18,7 +18,7 @@ export const IconProfile = ({focused = false, image, width = 35, height = 35, on
                     source={{ uri: image }}  /> 
                 :
                 <Image
-                    style={{...styles.image, width, resizeMode: 'center', margin: 2}}
+                    style={{...styles.image, width, resizeMode: 'contain', margin: 2}}
                     source={require('../../assets/noimage.png')}/>
             }
             

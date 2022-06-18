@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     text:{
-        color: '#9b9b9b',
+        color: 'black',
         fontWeight: '600'
     }
 })

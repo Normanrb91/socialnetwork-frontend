@@ -51,12 +51,12 @@ export const HeaderProfile = ({
           </Text>
 
           {
-          usuario?.biography&&
-          <Text style={{...styles.text, ...styles.textDescription }}>{usuario?.biography}</Text>
+          usuario?.biography?
+          <Text style={{...styles.text, ...styles.textDescription }}>{usuario?.biography}</Text> : null
           }
           
           <View style={styles.date}>
-            <Icon name='calendar-month' size={20} />
+            <Icon name='calendar-month' size={20} color={'gray'}/>
             <Text style={{...styles.textOff, marginLeft: 5 }}>{ timeInit(usuario?.createdAt) }</Text>
           </View>
           

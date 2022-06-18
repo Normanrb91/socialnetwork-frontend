@@ -165,6 +165,7 @@ export const Publication = memo(({props}) => {
                         <Ionicons 
                             size={25}
                             name={'ellipsis-vertical'}
+                            color={'black'}
                         />
                     </View>
                 </TouchableHighlight>
@@ -277,11 +278,12 @@ const styles = StyleSheet.create({
     },
     textRatio:{
         fontSize: 14,
-        fontWeight: '600'
+        fontWeight: '600',
+        color: 'gray'
     },
     iconContainer: {
         position: 'absolute',
-        right: -10,
+        right: -15,
         top: 5,
         borderRadius: 500
     },

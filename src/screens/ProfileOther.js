@@ -25,21 +25,6 @@ export const ProfileOtherUser = ({ route, navigation }) => {
   
   const {id, name} = route.params
 
-  useEffect(() => {
-
-    if(!isMounted.current) return
-
-    if( id !== usuarioOther?._id){
-      dispatch(cleanProfileOther())
-    }
-    dispatch(loadInfoOther(id))
-
-    return () => {
-      isMounted.current = false
-    }
-  }, [dispatch, id])
-
-  
   useLayoutEffect(() => {
     navigation.setOptions({
       title: name
@@ -47,6 +32,15 @@ export const ProfileOtherUser = ({ route, navigation }) => {
   }, [name])
   
 
+  useEffect(() => {
+    if( id !== usuarioOther?._id){
+      dispatch(cleanProfileOther())
+    }
+    dispatch(loadInfoOther(id))
+    
+  }, [dispatch, id])
+
+  
   const handleOnEndReached = () => {
     if(nextPageProfileOther){
       dispatch(loadPublications(nextPageProfileOther, id))

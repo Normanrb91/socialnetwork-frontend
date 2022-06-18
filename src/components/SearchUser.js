@@ -16,7 +16,7 @@ export const SearchUser = ({props}) => {
         navigation.navigate('ProfileOtherUser', {id: props._id, name: props.name })
     }
 
-    if( props.id === usuario._id) return <></>
+    if( props.id === usuario?._id) return null
 
     return (
         <View style={styles.container}>
@@ -30,10 +30,11 @@ export const SearchUser = ({props}) => {
                 <View style={styles.containerText}>
                     <Text style={styles.textName} onpress={irPerfil} numberOfLines={2} ellipsizeMode='tail'>{props.name}</Text>
                     {
-                    props.biography&&
+                    props.biography ?
                     <View>
                         <Text style={styles.textDescription} numberOfLines={2} ellipsizeMode='tail'>{props.biography}</Text>
                     </View>
+                    : null
                 }
                 </View>
             

@@ -169,13 +169,11 @@ export const profileReducer = (state = initialState , action) => {
             }
 
         case typesProfile.newPublicationProfile:
-            if(state.publicationsProfile.length > 0){
                 return {
                     ...state,
                     publicationsProfile: [action.payload.publicacion, ...state.publicationsProfile],
                     loadingProfile: false
                 }
-            }
 
         default:
             return state;

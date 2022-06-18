@@ -59,7 +59,7 @@ export const SearchBar = ({text, onChangeText}) => {
                 placeholderTextColor='rgba(0,0,0,0.4)' />
 
             {
-                showClose &&
+                showClose ?
                 <TouchableOpacity 
                     activeOpacity={0.6} 
                     style={styles.iconClose}
@@ -69,6 +69,8 @@ export const SearchBar = ({text, onChangeText}) => {
                         color={'gray'}
                         name={'close'}/> 
                 </TouchableOpacity>
+                :
+                null
             }
 
         </View>

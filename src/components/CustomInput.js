@@ -27,7 +27,7 @@ export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,
                         <Icon
                             color="#000"
                             name={icon} 
-                            size={20}
+                            size={25}
                             style={styles.icon} />
                     }
 
@@ -51,7 +51,7 @@ export const CustomInput = ({ icon, placeholder, secureTextEntry, control, name,
                         <Icon
                             color="#000"
                             name={showPass ? "eye-outline" : "eye-off-outline"} 
-                            size={20} 
+                            size={25} 
                             style={styles.iconPass} />
     
                     </TouchableOpacity>
