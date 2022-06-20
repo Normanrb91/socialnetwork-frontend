@@ -99,7 +99,7 @@ export const Comment = ({props}) => {
             </View>
 
             <View style={styles.footer}>
-                <Text>{ timeAgo(props.timestamp) }</Text>  
+                <Text style={styles.textTime}>{ timeAgo(props.timestamp) }</Text>  
             </View>
 
             <ModalComponent /> 
@@ -169,5 +169,8 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center',
         top: 0
+    },
+    textTime:{
+        color: '#ccc'
     }
 })

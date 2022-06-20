@@ -307,6 +307,9 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center',
         top: 0
+    },
+    time:{
+        color: '#ccc'
     }
 
 })
